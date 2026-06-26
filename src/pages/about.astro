@@ -1,5 +1,4 @@
 ---
-
 import { getEntry, render } from "astro:content";
 import Markdown from "@components/misc/Markdown.astro";
 import I18nKey from "../i18n/i18nKey";
@@ -7,19 +6,19 @@ import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
 
 const aboutPost = await getEntry("spec", "about");
-
-if (!aboutPost) {
-	throw new Error("About page content not found");
-}
-
+if (!aboutPost) throw new Error("About page content not found");
 const { Content } = await render(aboutPost);
 ---
 <MainGridLayout title={i18n(I18nKey.about)} description={i18n(I18nKey.about)}>
-    <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
-        <div class="card-base z-10 px-9 py-6 relative w-full ">
-            <Markdown class="mt-2">
+    <section class="pt-20 pb-12 max-w-3xl stagger">
+        <h1 class="serif leading-[1.05] text-[clamp(2.25rem,5vw,4rem)] text-[var(--deep-text)] mb-8 tracking-tight">
+          A few words <em class="gradient-text not-italic"><span class="serif italic">about me</span></em>.
+        </h1>
+        <div class="soft-divider mb-8"></div>
+        <div class="prose-content reveal">
+            <Markdown>
                 <Content />
             </Markdown>
         </div>
-    </div>
+    </section>
 </MainGridLayout>

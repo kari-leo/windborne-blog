@@ -1,0 +1,40 @@
+---
+import { getSortedPosts } from "../utils/content-utils";
+import { getPostUrlBySlug } from "../utils/url-utils";
+
+interface Props {
+  postCount?: number;
+}
+const { postCount = 0 } = Astro.props;
+
+const all = await getSortedPosts();
+const latest = all[0];
+---
+
+<section class="relative w-full pt-14 pb-10 stagger">
+  <!-- A single short declaration — no self-intro. Just a posture. -->
+  <h1 class="serif italic text-[clamp(2rem,3.2vw,2.75rem)] leading-[1.15] text-[var(--deep-text)] tracking-tight max-w-2xl">
+    Notes on <span class="gradient-text not-italic"><span class="serif italic">robotics</span></span>,
+    <span class="gradient-text not-italic"><span class="serif italic">constellations</span></span>,
+    and everything <span class="serif italic">in between</span>.
+  </h1>
+
+  <!-- Latest pinned — invites the reader straight to content -->
+  {latest && (
+    <a href={getPostUrlBySlug(latest.slug)} class="group/l mt-8 flex items-baseline gap-3 text-sm">
+      <span class="text-[var(--btn-content)]">most recent —</span>
+      <span class="serif italic text-[var(--deep-text)] group-hover/l:text-[var(--primary)] group-hover/l:translate-x-1 transition-all duration-300">
+        {latest.data.title}
+      </span>
+      <svg width="14" height="8" viewBox="0 0 14 8" fill="none" class="opacity-0 group-hover/l:opacity-100 -translate-x-1 group-hover/l:translate-x-0 transition-all duration-300 text-[var(--primary)]">
+        <path d="M0 4 L11 4 M8 1 L11 4 L8 7" stroke="currentColor" stroke-width="1" fill="none"/>
+      </svg>
+    </a>
+  )}
+</section>
+
+<div class="flex items-baseline justify-between mb-2 mt-6 reveal">
+  <h2 class="serif italic text-xl text-[var(--deep-text)] opacity-80">All notes</h2>
+  <span class="text-xs text-[var(--btn-content)]">{postCount} {postCount === 1 ? 'entry' : 'entries'}</span>
+</div>
+<div class="soft-divider mb-2"></div>

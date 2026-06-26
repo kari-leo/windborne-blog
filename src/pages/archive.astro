@@ -9,6 +9,14 @@ const sortedPostsList = await getSortedPostsList();
 ---
 
 <MainGridLayout title={i18n(I18nKey.archive)}>
-    <ArchivePanel sortedPosts={sortedPostsList} client:only="svelte"></ArchivePanel>
+    <section class="pt-20 pb-12 stagger">
+        <h1 class="serif leading-[1.05] text-[clamp(2.25rem,5vw,4rem)] text-[var(--deep-text)] mb-3 tracking-tight">
+          Everything, <em class="gradient-text not-italic"><span class="serif italic">in order</span></em>.
+        </h1>
+        <p class="text-base text-[var(--btn-content)] mb-8">A complete record of what I've written here.</p>
+        <div class="soft-divider mb-8"></div>
+        <div class="reveal">
+          <ArchivePanel sortedPosts={sortedPostsList} client:only="svelte"></ArchivePanel>
+        </div>
+    </section>
 </MainGridLayout>
-

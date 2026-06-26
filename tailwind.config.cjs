@@ -6,7 +6,13 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Roboto", "sans-serif", ...defaultTheme.fontFamily.sans],
+        sans: ["Geist", "sans-serif", ...defaultTheme.fontFamily.sans],
+        mono: ["Geist Mono", "JetBrains Mono Variable", "ui-monospace", ...defaultTheme.fontFamily.mono],
+        serif: ["Instrument Serif", "Georgia", "Cambria", ...defaultTheme.fontFamily.serif],
+      },
+      letterSpacing: {
+        tighter: "-0.03em",
+        tight: "-0.015em",
       },
     },
   },

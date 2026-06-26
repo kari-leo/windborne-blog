@@ -7,8 +7,21 @@
     h1, h2, h3, h4, h5, h6, p, a, span, li, ul, ol, blockquote, code, pre, table, th, td, strong {
         @apply transition;
     }
+    h1, h2, h3 {
+        letter-spacing: -0.025em;
+        font-weight: 600;
+    }
     .card-shadow {
-        @apply drop-shadow-[0_2px_4px_rgba(0,0,0,0.005)]
+        box-shadow:
+            0 0 0 1px rgba(0,0,0,0.04),
+            0 2px 4px rgba(0,0,0,0.04),
+            0 6px 12px rgba(0,0,0,0.03);
+    }
+    .dark .card-shadow {
+        box-shadow:
+            0 0 0 1px rgba(255,255,255,0.05),
+            0 2px 4px rgba(0,0,0,0.4),
+            0 6px 12px rgba(0,0,0,0.3);
     }
     .expand-animation {
         @apply relative before:ease-out before:transition active:bg-none hover:before:bg-[var(--btn-plain-bg-hover)] active:before:bg-[var(--btn-plain-bg-active)] z-0
@@ -21,7 +34,12 @@
         @apply transition rounded-md p-1.5 -m-1.5 expand-animation;
     }
     .float-panel {
-        @apply top-[5.25rem] rounded-[var(--radius-large)] overflow-hidden bg-[var(--float-panel-bg)] transition shadow-xl dark:shadow-none
+        @apply top-[5.25rem] rounded-[var(--radius-large)] overflow-hidden bg-[var(--float-panel-bg)] transition;
+        border: 1px solid var(--line-divider);
+        box-shadow:
+            0 0 0 1px rgba(0,0,0,0.04),
+            0 4px 16px rgba(0,0,0,0.08),
+            0 12px 32px rgba(0,0,0,0.06);
     }
     .float-panel-closed {
         @apply -translate-y-1 opacity-0 pointer-events-none
@@ -104,11 +122,11 @@
 
     .btn-regular-dark {
         @apply flex items-center justify-center
-        bg-[oklch(0.45_0.01_var(--hue))] hover:bg-[oklch(0.50_0.01_var(--hue))] active:bg-[oklch(0.55_0.01_var(--hue))]
-        dark:bg-[oklch(0.30_0.02_var(--hue))] dark:hover:bg-[oklch(0.35_0.03_var(--hue))] dark:active:bg-[oklch(0.40_0.03_var(--hue))]
+        bg-[#1a1a1a] hover:bg-[#242424] active:bg-[#2e2e2e]
+        dark:bg-[#1a1a1a] dark:hover:bg-[#222222] dark:active:bg-[#2e2e2e]
     }
     .btn-regular-dark.success {
-        @apply bg-[oklch(0.75_0.14_var(--hue))] dark:bg-[oklch(0.75_0.14_var(--hue))]
+        @apply bg-[#0ea5e9] dark:bg-[#38bdf8]
     }
 }
 

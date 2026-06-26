@@ -1,0 +1,170 @@
+---
+import { Icon } from "astro-icon/components";
+import { navBarConfig, profileConfig, siteConfig } from "../config";
+import { LinkPresets } from "../constants/link-presets";
+import { LinkPreset, type NavBarLink } from "../types/config";
+import { getCategoryList, getSortedPostsList, getTagList } from "../utils/content-utils";
+import { getPostUrlBySlug, getTagUrl, url } from "../utils/url-utils";
+
+const links: NavBarLink[] = navBarConfig.links.map(
+  (item: NavBarLink | LinkPreset): NavBarLink =>
+    typeof item === "number" ? LinkPresets[item] : item,
+);
+
+const currentPath = Astro.url.pathname;
+const initial = profileConfig.name.charAt(0).toUpperCase();
+
+const [categories, tags, recentPosts] = await Promise.all([
+  getCategoryList(),
+  getTagList(),
+  getSortedPostsList(),
+]);
+
+const recent = recentPosts.slice(0, 5);
+const topTags = tags.slice().sort((a, b) => b.count - a.count).slice(0, 12);
+---
+
+<aside id="left-rail" class="hidden lg:block">
+  <div class="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto hide-scrollbar pr-2 pb-6">
+    <!-- Compact identity — brand + slogan -->
+    <a href={url('/about/')} aria-label="About the author" class="group flex items-center gap-2.5 mb-1">
+      <div class="relative w-7 h-7 shrink-0">
+        <div class="absolute inset-0 rounded-full avatar-orb transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110">
+          <span class="serif italic text-sm text-white/95 absolute inset-0 flex items-center justify-center select-none leading-none pt-px">{initial}</span>
+        </div>
+      </div>
+      <div class="min-w-0">
+        <div class="serif italic text-lg text-[var(--deep-text)] leading-tight group-hover:text-[var(--primary)] transition-colors">{siteConfig.title}</div>
+      </div>
+    </a>
+    <div class="text-xs text-[var(--btn-content)] mb-7 ml-[2.375rem] serif italic">{siteConfig.subtitle}</div>
+
+    <!-- Navigate -->
+    <div class="section-block">
+      <h3 class="section-label">Navigate</h3>
+      <nav class="flex flex-col -mx-1">
+        {links.map(l => {
+          const href = l.external ? l.url : url(l.url);
+          const isCurrent = !l.external && (l.url === '/' ? currentPath === url('/') : currentPath.startsWith(url(l.url)));
+          return (
+            <a href={href} target={l.external ? "_blank" : null}
+               class:list={["nav-link group/n relative inline-flex items-baseline justify-between py-1.5 px-1 text-sm rounded transition-colors", isCurrent ? "is-current text-[var(--deep-text)]" : "text-[var(--btn-content)] hover:text-[var(--deep-text)]"]}>
+              <span class="flex items-baseline gap-2">
+                <span class="nav-marker inline-block w-0 group-hover/n:w-3 transition-all duration-300 ease-out h-px bg-[var(--deep-text)] translate-y-[-3px]"></span>
+                <span>{l.name}</span>
+                {l.external && <Icon name="fa6-solid:arrow-up-right-from-square" class="text-[0.55rem] opacity-40 -translate-y-1.5"/>}
+              </span>
+            </a>
+          );
+        })}
+      </nav>
+    </div>
+
+    <!-- Recent posts -->
+    {recent.length > 0 && (
+      <div class="section-block">
+        <h3 class="section-label">Recent</h3>
+        <ul class="flex flex-col gap-1.5">
+          {recent.map(p => (
+            <li>
+              <a href={getPostUrlBySlug(p.slug)}
+                 class="group/r block text-sm leading-snug transition-colors">
+                <span class="serif italic text-[var(--deep-text)]/85 group-hover/r:text-[var(--primary)] transition-colors">{p.data.title}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <a href={url('/archive/')}
+           class="mt-3 inline-flex items-center gap-1.5 text-xs text-[var(--btn-content)] hover:text-[var(--primary)] transition-all group/a">
+          <span>browse all {recentPosts.length} notes</span>
+          <svg width="12" height="7" viewBox="0 0 12 7" fill="none" class="transition-transform group-hover/a:translate-x-1">
+            <path d="M0 3.5 L9 3.5 M7 1 L9 3.5 L7 6" stroke="currentColor" stroke-width="1" fill="none"/>
+          </svg>
+        </a>
+      </div>
+    )}
+
+    <!-- Categories -->
+    {categories.length > 0 && (
+      <div class="section-block">
+        <h3 class="section-label">Categories</h3>
+        <ul class="flex flex-col">
+          {categories.map(c => (
+            <li>
+              <a href={c.url}
+                 class="group/c flex items-baseline justify-between py-1.5 text-sm transition-colors">
+                <span class="text-[var(--btn-content)] group-hover/c:text-[var(--deep-text)] transition-colors">{c.name.trim()}</span>
+                <span class="text-[0.7rem] text-[var(--btn-content)]/60 tabular-nums">{c.count.toString().padStart(2,'0')}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    <!-- Tag cloud -->
+    {topTags.length > 0 && (
+      <div class="section-block">
+        <h3 class="section-label">Tags</h3>
+        <div class="flex flex-wrap gap-x-2.5 gap-y-1.5 -mt-1">
+          {topTags.map(t => (
+            <a href={getTagUrl(t.name)}
+               class="text-sm text-[var(--btn-content)] hover:text-[var(--primary)] hover:italic transition-all">
+              {t.name.trim()}
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Socials -->
+    <div class="mt-7 pt-5 border-t border-[var(--line-color)] flex items-center gap-1">
+      {profileConfig.links.map(item => (
+        <a href={item.url} target="_blank" rel="me" aria-label={item.name}
+           class="w-7 h-7 rounded-full flex items-center justify-center text-[var(--btn-content)] hover:text-[var(--primary)] hover:bg-[var(--btn-plain-bg-hover)] transition-all duration-300 hover:-translate-y-0.5">
+          <Icon name={item.icon} class="text-[0.8rem]"/>
+        </a>
+      ))}
+      <a href={url('rss.xml')} target="_blank" aria-label="RSS"
+         class="w-7 h-7 rounded-full flex items-center justify-center text-[var(--btn-content)] hover:text-[var(--primary)] hover:bg-[var(--btn-plain-bg-hover)] transition-all duration-300 hover:-translate-y-0.5">
+        <Icon name="fa6-solid:rss" class="text-[0.7rem]"/>
+      </a>
+    </div>
+  </div>
+</aside>
+
+<style>
+  .avatar-orb {
+    background:
+      radial-gradient(circle at 30% 30%, #f4b89e 0%, transparent 50%),
+      radial-gradient(circle at 70% 60%, #b86fcc 0%, transparent 50%),
+      linear-gradient(135deg, #d97757 0%, #b86fcc 60%, #6f9fcc 100%);
+    box-shadow:
+      0 2px 8px rgba(184, 111, 204, 0.25),
+      inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  }
+
+  .section-block {
+    margin-bottom: 1.75rem;
+  }
+  .section-label {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--deep-text);
+    opacity: 0.75;
+    margin-bottom: 0.65rem;
+  }
+
+  .nav-link.is-current::before {
+    content: '';
+    position: absolute;
+    left: -0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 3px;
+    border-radius: 999px;
+    background: var(--primary);
+  }
+</style>
