@@ -1,6 +1,6 @@
 ---
 title: 飞书 Bot 开发笔记
-published: published: 2026-08-06
+published: 2026-08-06
 description: 飞书机器人开发过程中的技术路线、问题解决方案和经验总结
 tags: [telebot]
 ---
