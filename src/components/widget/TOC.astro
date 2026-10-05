@@ -10,13 +10,17 @@ interface Props {
 
 let { headings = [] } = Astro.props;
 
+// Project documents have a document title at h1. Start their outline at h2
+// so the right rail shows sections and subsections, like a post outline.
+const isPortfolioRoute = Astro.url.pathname.startsWith(url("/portfolio/"));
+const tocHeadings = isPortfolioRoute ? headings.filter((heading) => heading.depth >= 2) : headings;
+
 let minDepth = 10;
-for (const heading of headings) {
+for (const heading of tocHeadings) {
 	minDepth = Math.min(minDepth, heading.depth);
 }
 
 const className = Astro.props.class;
-const isPostsRoute = Astro.url.pathname.startsWith(url("/posts/"));
 
 const removeTailingHash = (text: string) => {
 	let lastIndexOfHash = text.lastIndexOf("#");
@@ -31,9 +35,9 @@ let heading1Count = 1;
 
 const maxLevel = siteConfig.toc.depth;
 ---
-{isPostsRoute &&
+{tocHeadings.length > 0 &&
 <table-of-contents class:list={[className, "group"]}>
-    {headings.filter((heading) => heading.depth < minDepth + maxLevel).map((heading) =>
+    {tocHeadings.filter((heading) => heading.depth < minDepth + maxLevel).map((heading) =>
             <a href={`#${heading.slug}`} class="px-2 flex gap-2 relative transition w-full min-h-9 rounded-xl
         hover:bg-[var(--toc-btn-hover)] active:bg-[var(--toc-btn-active)] py-2
     ">
@@ -55,7 +59,7 @@ const maxLevel = siteConfig.toc.depth;
                 }]}>{removeTailingHash(heading.text)}</div>
             </a>
     )}
-    <div id="active-indicator" style="opacity: 0" class:list={[{'hidden': headings.length == 0}, "-z-10 absolute bg-[var(--toc-btn-hover)] left-0 right-0 rounded-xl transition-all " +
+    <div id="active-indicator" style="opacity: 0" class:list={[{'hidden': tocHeadings.length == 0}, "-z-10 absolute bg-[var(--toc-btn-hover)] left-0 right-0 rounded-xl transition-all " +
         "group-hover:bg-transparent border-2 border-[var(--toc-btn-hover)] group-hover:border-[var(--toc-btn-active)] border-dashed"]}></div>
 </table-of-contents>}
 

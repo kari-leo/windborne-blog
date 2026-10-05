@@ -1,6 +1,6 @@
 ---
 import { getSortedPosts } from "../utils/content-utils";
-import { getPostUrlBySlug } from "../utils/url-utils";
+import { getPostUrlBySlug, url } from "../utils/url-utils";
 
 interface Props {
   postCount?: number;
@@ -31,6 +31,11 @@ const latest = all[0];
       </svg>
     </a>
   )}
+
+  <a href={url("/portfolio/")} class="group/p mt-5 inline-flex items-baseline gap-2 text-sm text-[var(--btn-content)] hover:text-[var(--primary)] transition-colors">
+    <span class="serif italic text-[var(--deep-text)]">Product portfolio</span>
+    <span class="transition-transform duration-300 group-hover/p:translate-x-1">&rarr;</span>
+  </a>
 </section>
 
 <div class="flex items-baseline justify-between mb-2 mt-6 reveal">

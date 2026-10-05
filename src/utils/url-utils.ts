@@ -16,6 +16,14 @@ export function getPostUrlBySlug(slug: string): string {
 	return url(`/posts/${slug}/`);
 }
 
+export function getProjectUrlBySlug(slug: string): string {
+	return url(`/portfolio/${slug}/`);
+}
+
+export function getProjectDocumentUrl(projectSlug: string, documentSlug: string): string {
+	return url(`/portfolio/${projectSlug}/${documentSlug}/`);
+}
+
 export function getTagUrl(tag: string): string {
 	if (!tag) return url("/archive/");
 	return url(`/archive/?tag=${encodeURIComponent(tag.trim())}`);

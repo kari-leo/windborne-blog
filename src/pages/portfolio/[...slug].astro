@@ -1,0 +1,51 @@
+---
+import Markdown from "@components/misc/Markdown.astro";
+import ProjectMobileNav from "@components/ProjectMobileNav.astro";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { getProjectDocuments, getSortedProjects } from "@utils/content-utils";
+import { getProjectDocumentUrl } from "@utils/url-utils";
+
+export async function getStaticPaths() {
+	const projects = await getSortedProjects();
+	return projects.map((entry) => ({
+		params: { slug: entry.slug },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+const documents = await getProjectDocuments(entry.slug);
+const { Content } = await entry.render();
+const documentSlug = (document: (typeof documents)[number]) => document.slug.split("/").at(-1) ?? document.slug;
+---
+
+<MainGridLayout title={`${entry.data.title} · 作品集`} description={entry.data.description} projectNavigation={{ project: entry, documents }}>
+	<div class="min-w-0 pb-16 pt-12" data-pagefind-ignore>
+		<ProjectMobileNav project={entry} documents={documents} />
+		<div data-pagefind-body>
+			<div class="mb-9 border-b border-[var(--line-color)] pb-8">
+				<p class="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--btn-content)]">{entry.data.status} / 项目概览</p>
+				<h1 class="serif mb-5 text-[clamp(2.5rem,5vw,4rem)] leading-none text-[var(--deep-text)]">{entry.data.title}</h1>
+				<p class="max-w-2xl text-base leading-relaxed text-[var(--btn-content)]">{entry.data.description}</p>
+				{entry.data.projectUrl && <a href={entry.data.projectUrl} target="_blank" rel="noreferrer" class="mt-5 inline-block text-sm text-[var(--primary)]">访问项目 &nearr;</a>}
+			</div>
+			<Markdown class="markdown-content"><Content /></Markdown>
+			<section class="mt-12" aria-labelledby="documents-heading">
+				<div class="mb-5 flex items-baseline justify-between border-b border-[var(--line-color)] pb-4">
+					<h2 id="documents-heading" class="serif text-2xl text-[var(--deep-text)]">项目文档</h2>
+					<span class="text-xs tabular-nums text-[var(--btn-content)]">{String(documents.length).padStart(2, "0")}</span>
+				</div>
+				{documents.length > 0 ? (
+					<div class="grid gap-3">
+						{documents.map((document, index) => (
+							<a href={getProjectDocumentUrl(entry.slug, documentSlug(document))} class="group flex items-start gap-4 rounded-lg border border-[var(--line-color)] bg-[var(--card-bg)] p-5 transition-colors hover:border-[var(--primary)]/40">
+								<span class="pt-1 text-xs tabular-nums text-[var(--btn-content)]">{String(index + 1).padStart(2, "0")}</span>
+								<span class="min-w-0 flex-1"><strong class="mb-1 block text-base font-medium text-[var(--deep-text)] transition-colors group-hover:text-[var(--primary)]">{document.data.title}</strong><span class="text-sm leading-relaxed text-[var(--btn-content)]">{document.data.description}</span></span>
+								<span aria-hidden="true" class="text-[var(--btn-content)] transition-transform group-hover:translate-x-1">&rarr;</span>
+							</a>
+						))}
+					</div>
+				) : <p class="text-sm text-[var(--btn-content)]">文档整理中。</p>}
+			</section>
+	</div>
+</MainGridLayout>

@@ -31,6 +31,26 @@ export async function getSortedPosts() {
 
 	return sorted;
 }
+
+export async function getSortedProjects() {
+	const projects = await getCollection("projects", ({ data }) => {
+		return import.meta.env.PROD ? data.draft !== true : true;
+	});
+
+	return projects.sort((a, b) => {
+		const dateA = new Date(a.data.published);
+		const dateB = new Date(b.data.published);
+		return dateA > dateB ? -1 : 1;
+	});
+}
+
+export async function getProjectDocuments(projectSlug: string) {
+	const documents = await getCollection("projectDocuments", ({ data }) =>
+		data.project === projectSlug && (!import.meta.env.PROD || data.draft !== true),
+	);
+	return documents.sort((a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title));
+}
+
 export type PostForList = {
 	slug: string;
 	data: CollectionEntry<"posts">["data"];

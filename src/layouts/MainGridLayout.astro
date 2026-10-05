@@ -4,6 +4,7 @@ import Footer from "@components/Footer.astro";
 import LeftRail from "@components/LeftRail.astro";
 import Navbar from "@components/Navbar.astro";
 import type { MarkdownHeading } from "astro";
+import type { CollectionEntry } from "astro:content";
 import TOC from "../components/widget/TOC.astro";
 import { siteConfig } from "../config";
 import Layout from "./Layout.astro";
@@ -15,9 +16,14 @@ interface Props {
 	lang?: string;
 	setOGTypeArticle?: boolean;
 	headings?: MarkdownHeading[];
+	projectNavigation?: {
+		project: CollectionEntry<"projects">;
+		documents: CollectionEntry<"projectDocuments">[];
+		activeSlug?: string;
+	};
 }
 
-const { title, description, lang, setOGTypeArticle, headings = [] } = Astro.props;
+const { title, description, lang, setOGTypeArticle, headings = [], projectNavigation } = Astro.props;
 ---
 
 <Layout title={title} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle}>
@@ -35,7 +41,7 @@ const { title, description, lang, setOGTypeArticle, headings = [] } = Astro.prop
 <div class="relative z-10 max-w-[var(--page-width)] mx-auto px-4 md:px-8">
     <div class="grid grid-cols-1 lg:grid-cols-[16rem_1fr] gap-10 lg:gap-16">
         <!-- Left sidebar — sticky author + nav -->
-        <LeftRail />
+        <LeftRail projectNavigation={projectNavigation} />
 
         <!-- Main column -->
         <div class="min-w-0">

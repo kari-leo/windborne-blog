@@ -1,0 +1,21 @@
+---
+import PortfolioCard from "@components/PortfolioCard.astro";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { getSortedProjects } from "@utils/content-utils";
+
+const projects = await getSortedProjects();
+---
+
+<MainGridLayout title="作品集" description="产品设计与实践项目。">
+	<section class="pt-20 pb-12" data-pagefind-ignore>
+		<p class="mb-4 text-sm uppercase tracking-[0.12em] text-[var(--btn-content)]">Selected work</p>
+		<h1 class="serif mb-3 text-[clamp(2.5rem,5vw,4rem)] leading-[1.05] tracking-tight text-[var(--deep-text)]">作品集<span class="gradient-text">.</span></h1>
+		<p class="mb-10 max-w-2xl text-base leading-relaxed text-[var(--btn-content)]">从问题定义到产品方案，记录一些正在发生的实践。</p>
+
+		{projects.length > 0 ? (
+			<div class="grid gap-5 xl:grid-cols-2">{projects.map((entry) => <PortfolioCard entry={entry} />)}</div>
+		) : (
+			<p class="py-10 text-[var(--btn-content)]">Projects will appear here.</p>
+		)}
+	</section>
+</MainGridLayout>

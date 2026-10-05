@@ -1,0 +1,47 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getProjectDocumentUrl, getProjectUrlBySlug, url } from "@utils/url-utils";
+
+interface Props {
+	project: CollectionEntry<"projects">;
+	documents: CollectionEntry<"projectDocuments">[];
+	activeSlug?: string;
+}
+
+const { project, documents, activeSlug } = Astro.props;
+const documentSlug = (entry: CollectionEntry<"projectDocuments">) => entry.slug.split("/").at(-1) ?? entry.slug;
+---
+
+<aside class="project-nav" aria-label={`${project.data.title} 文档导航`}>
+	<a class="back-link" href={url("/portfolio/")}>&larr; 返回作品集</a>
+	<div class="project-nav-heading">
+		<span class="eyebrow">PROJECT / {project.slug.toUpperCase()}</span>
+		<a href={getProjectUrlBySlug(project.slug)} class="project-name">{project.data.title}</a>
+	</div>
+	<nav class="document-links" aria-label="项目文档">
+		<a href={getProjectUrlBySlug(project.slug)} class:list={["document-link", !activeSlug && "active"]} aria-current={!activeSlug ? "page" : undefined}>
+			<span class="document-marker"></span>项目概览
+		</a>
+		{documents.map((entry, index) => (
+			<a href={getProjectDocumentUrl(project.slug, documentSlug(entry))} class:list={["document-link", activeSlug === documentSlug(entry) && "active"]} aria-current={activeSlug === documentSlug(entry) ? "page" : undefined}>
+				<span class="document-marker"></span><span class="document-index">{String(index + 1).padStart(2, "0")}</span>{entry.data.title}
+			</a>
+		))}
+	</nav>
+</aside>
+
+<style>
+	.project-nav { min-width: 0; }
+	.back-link { display: inline-block; margin-bottom: 1.5rem; color: var(--btn-content); font-size: .8rem; transition: color .2s; }
+	.back-link:hover { color: var(--primary); }
+	.project-nav-heading { padding-bottom: 1.25rem; border-bottom: 1px solid var(--line-color); }
+	.eyebrow { display: block; margin-bottom: .5rem; color: var(--btn-content); font-size: .65rem; font-weight: 700; letter-spacing: .17em; }
+	.project-name { color: var(--deep-text); font-family: 'Instrument Serif', Georgia, serif; font-size: 2rem; line-height: 1; }
+	.document-links { display: flex; flex-direction: column; gap: .2rem; padding-top: 1.15rem; }
+	.document-link { display: flex; align-items: baseline; gap: .65rem; padding: .65rem .35rem; border-radius: .35rem; color: var(--btn-content); font-size: .84rem; line-height: 1.5; transition: color .2s, background .2s; }
+	.document-link:hover { color: var(--deep-text); background: var(--btn-plain-bg-hover); }
+	.document-link.active { color: var(--primary); font-weight: 600; }
+	.document-marker { align-self: center; display: block; width: 3px; height: 3px; flex: 0 0 3px; border-radius: 50%; background: currentColor; opacity: .45; }
+	.document-link.active .document-marker { opacity: 1; }
+	.document-index { color: var(--btn-content); font-size: .7rem; font-weight: 400; font-variant-numeric: tabular-nums; }
+</style>

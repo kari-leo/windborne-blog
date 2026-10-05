@@ -1,0 +1,37 @@
+---
+import Markdown from "@components/misc/Markdown.astro";
+import ProjectMobileNav from "@components/ProjectMobileNav.astro";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { getProjectDocuments, getSortedProjects } from "@utils/content-utils";
+import { getProjectUrlBySlug } from "@utils/url-utils";
+
+export async function getStaticPaths() {
+	const projects = await getSortedProjects();
+	const groups = await Promise.all(projects.map(async (project) => {
+		const documents = await getProjectDocuments(project.slug);
+		return documents.map((document) => ({
+			params: { project: project.slug, document: document.slug.split("/").at(-1) ?? document.slug },
+			props: { project, document, documents },
+		}));
+	}));
+	return groups.flat();
+}
+
+const { project, document, documents } = Astro.props;
+const activeSlug = document.slug.split("/").at(-1) ?? document.slug;
+const { Content, headings } = await document.render();
+---
+
+<MainGridLayout title={`${document.data.title} · ${project.data.title}`} description={document.data.description} headings={headings} projectNavigation={{ project, documents, activeSlug }}>
+	<div class="min-w-0 pb-16 pt-12">
+		<ProjectMobileNav project={project} documents={documents} activeSlug={activeSlug} />
+		<article class="min-w-0">
+			<div class="mb-9 border-b border-[var(--line-color)] pb-7">
+				<a href={getProjectUrlBySlug(project.slug)} class="mb-3 inline-block text-xs font-semibold uppercase tracking-[0.16em] text-[var(--btn-content)] hover:text-[var(--primary)]">{project.data.title} / 项目文档</a>
+				<h1 class="serif mb-3 text-[clamp(2rem,4vw,3.25rem)] leading-tight text-[var(--deep-text)]">{document.data.title}</h1>
+				{document.data.description && <p class="text-sm leading-relaxed text-[var(--btn-content)]">{document.data.description}</p>}
+			</div>
+			<Markdown class="markdown-content"><Content /></Markdown>
+		</article>
+	</div>
+</MainGridLayout>

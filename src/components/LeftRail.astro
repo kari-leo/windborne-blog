@@ -1,5 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
+import type { CollectionEntry } from "astro:content";
+import ProjectDocumentsNav from "./ProjectDocumentsNav.astro";
 import { navBarConfig, profileConfig, siteConfig } from "../config";
 import { LinkPresets } from "../constants/link-presets";
 import { LinkPreset, type NavBarLink } from "../types/config";
@@ -10,6 +12,16 @@ const links: NavBarLink[] = navBarConfig.links.map(
   (item: NavBarLink | LinkPreset): NavBarLink =>
     typeof item === "number" ? LinkPresets[item] : item,
 );
+
+interface Props {
+  projectNavigation?: {
+    project: CollectionEntry<"projects">;
+    documents: CollectionEntry<"projectDocuments">[];
+    activeSlug?: string;
+  };
+}
+
+const { projectNavigation } = Astro.props;
 
 const currentPath = Astro.url.pathname;
 const initial = profileConfig.name.charAt(0).toUpperCase();
@@ -60,8 +72,14 @@ const topTags = tags.slice().sort((a, b) => b.count - a.count).slice(0, 12);
       </nav>
     </div>
 
+    {projectNavigation && (
+      <div class="section-block border-t border-[var(--line-color)] pt-5">
+        <ProjectDocumentsNav {...projectNavigation} />
+      </div>
+    )}
+
     <!-- Recent posts -->
-    {recent.length > 0 && (
+    {!projectNavigation && recent.length > 0 && (
       <div class="section-block">
         <h3 class="section-label">Recent</h3>
         <ul class="flex flex-col gap-1.5">
@@ -85,7 +103,7 @@ const topTags = tags.slice().sort((a, b) => b.count - a.count).slice(0, 12);
     )}
 
     <!-- Categories -->
-    {categories.length > 0 && (
+    {!projectNavigation && categories.length > 0 && (
       <div class="section-block">
         <h3 class="section-label">Categories</h3>
         <ul class="flex flex-col">
@@ -103,7 +121,7 @@ const topTags = tags.slice().sort((a, b) => b.count - a.count).slice(0, 12);
     )}
 
     <!-- Tag cloud -->
-    {topTags.length > 0 && (
+    {!projectNavigation && topTags.length > 0 && (
       <div class="section-block">
         <h3 class="section-label">Tags</h3>
         <div class="flex flex-wrap gap-x-2.5 gap-y-1.5 -mt-1">
