@@ -1,10 +1,12 @@
 ---
-title: "TeleBot 定时委托 PRD"
-description: "TeleBot 定时委托功能需求文档"
+title: "TeleBot 定时委托 PRD（功能迭代）"
+description: "一次定时委托功能迭代的需求文档，记录迭代背景、目标与交互规则。"
 project: "telebot"
 order: 3
 ---
 # TeleBot「定时委托」PRD：任务定时触发与主动执行
+
+> **文档定位：** 这是 TeleBot 在一次功能迭代中的 PRD，聚焦“定时委托”的需求与设计。产品起步时的最小 MVP 见[《TeleBot 初始 PRD》](/portfolio/telebot/telebot-prd-mvp/)，产品当前状态见[《TeleBot 产品说明》](/portfolio/telebot/telebot-product-case/)。
 
 > **功能名称：** 定时委托（Scheduled Delegation）  
 > **功能范围：** TeleBot 任务定时触发  

@@ -1,10 +1,12 @@
 ---
-title: "TeleBot PRD MVP"
-description: "TeleBot MVP 版本需求文档"
+title: "TeleBot 初始 PRD（最小 MVP）"
+description: "产品起步时的需求文档，定义最小 MVP 的范围与验证闭环。"
 project: "telebot"
 order: 2
 ---
-# TeleBot 产品需求文档（MVP）
+# TeleBot 产品需求文档（初始最小 MVP）
+
+> **文档定位：** 这是 TeleBot 产品一开始的 PRD，设计的是起步阶段的最小 MVP，记录当时的需求与产品范围。产品当前状态见[《TeleBot 产品说明》](/portfolio/telebot/telebot-product-case/)。
 
 > **产品定位：** 通过飞书连接手机与个人电脑，让用户在离开电脑时，仍能用自然语言调用本机能力并获得结果。  
 > **MVP 核心：** 飞书对话 + 本机文件检索/收发 + 博客内容写入与推送。  
@@ -644,4 +646,3 @@ flowchart LR
 ```
 
 其中只有前两项属于第一版 MVP。
-

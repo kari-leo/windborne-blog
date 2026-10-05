@@ -1,10 +1,12 @@
 ---
-title: "TeleBot 产品案例"
-description: "TeleBot 产品案例分析"
+title: "TeleBot 产品说明（当前状态）"
+description: "产品当前状态下的说明，介绍主要功能、产品演进与实际使用案例。"
 project: "telebot"
 order: 1
 ---
 # TeleBot 产品案例：从远程取文件到任务驱动的本地 AI 助手
+
+> **文档定位：** 这是 TeleBot 产品现在状态下的产品说明，结合实际使用案例介绍当前功能与产品演进。产品起步时的最小 MVP 设计见[《TeleBot 初始 PRD》](/portfolio/telebot/telebot-prd-mvp/)，一次定时委托功能迭代的需求设计见[《TeleBot 定时委托 PRD》](/portfolio/telebot/telebot-scheduled-prd/)。
 
 > 通过飞书连接个人电脑，把“人在外面无法使用本机能力”转化为“在聊天中直接委托任务，由电脑执行并返回结果”。
 
