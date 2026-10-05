@@ -71,6 +71,7 @@ In addition to Astro's default support for [GitHub Flavored Markdown](https://gi
 - Admonitions ([Preview and Usage](https://fuwari.vercel.app/posts/markdown-extended/#admonitions))
 - GitHub repository cards ([Preview and Usage](https://fuwari.vercel.app/posts/markdown-extended/#github-repository-cards))
 - Enhanced code blocks with Expressive Code ([Preview](https://fuwari.vercel.app/posts/expressive-code/) / [Docs](https://expressive-code.com/))
+- Mermaid diagrams: use a fenced code block with the `mermaid` language. Diagrams render automatically, follow light/dark mode, and keep their source visible if rendering fails.
 
 ## ⚡ Commands
 

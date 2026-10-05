@@ -1,0 +1,32 @@
+.custom-md .mermaid-diagram {
+    display: block;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border: 1px solid var(--line-color);
+    border-radius: 0.75rem;
+    background: var(--card-bg);
+    overflow-x: auto;
+}
+
+.custom-md .mermaid-source {
+    margin: 0;
+    white-space: pre;
+    overflow-x: auto;
+}
+
+.custom-md .mermaid-rendered > .mermaid-source {
+    display: none;
+}
+
+.custom-md .mermaid-output > svg {
+    display: block;
+    max-width: none;
+    height: auto;
+    margin-inline: auto;
+}
+
+.custom-md .mermaid-error {
+    margin: 0 0 0.75rem;
+    color: var(--primary);
+    font-size: 0.875rem;
+}
