@@ -7,12 +7,8 @@ order: 2
 
 # 迁作 ReTask｜可重配置仓储移动操作系统
 
-> **文档类型：** 商业化切入产品说明 / 市场机会与产品定义（非研发 PRD）  
-> **名称：** “迁作”强调跨工位迁移与任务重新配置；**ReTask 为内部暂定英文代号**，正式品牌使用前须完成商标与域名检索。  
-> **版本：** V1.0 · 2026-10-05  
 > **阶段：** 公开市场与竞品研究完成；3PL 一手访谈、现场观察、成本核算及真实 PoC 待执行  
 > **定位边界：** 面向 3PL 的独立 B2B 产品，不以“将来进入家庭”作为客户购买理由。  
-> **证据约定：** `[事实]` 为文末有来源的公开信息；`[假设]` 为待验证的客户/市场判断；`[方案]` 为拟议产品；`[目标]` 为内部研究或 PoC 门槛，而非已达到的性能。
 
 ---
 
@@ -383,5 +379,3 @@ flowchart LR
 - **[R8]** Boston Dynamics, *Stretch Product Brochure 2025*：https://bostondynamics.com/wp-content/uploads/2024/01/Stretch-Brochure-2025-compressed.pdf
 - **[R9]** ISO, *ISO 3691-4:2023 — Safety requirements for driverless industrial trucks*：https://www.iso.org/standard/83545.html
 - **[R10]** ISO, *ISO 10218-1:2025 / ISO 10218-2:2025 — Industrial robot and robot application safety*：https://www.iso.org/standard/73933.html ；https://www.iso.org/standard/73934.html
-
-> **尚缺证据：** 目标区域的 3PL 工位级成本、可竞争的固定/AMR 机械臂正式报价、细分包裹谱及异常占比、两工位负载分布、系统集成成本、移动组合机器人适用认证及客户真实试点采购承诺。上述信息必须在一手研究后更新，不得将海外厂商案例直接写成目标客户已验证需求。

@@ -7,11 +7,9 @@ order: 1
 
 # HomeAgent｜智能家庭通用物理执行终端
 
-> **文档类型：** 产品说明 / 市场机会与产品定义（非研发 PRD）  
-> **版本：** V1.0 · 2026-10-05  
 > **阶段：** 产品概念与公开资料研究完成；一手用户研究、技术 PoC 与商业验证待开展  
 > **研究范围：** 家庭内可移动、可感知、具备受限物理操作能力的机器人及其与智能家居系统的协同  
-> **证据约定：** `[事实]` 为附有来源的公开信息；`[假设]` 为待验证的产品判断；`[方案]` 为拟议设计；`[目标]` 为内部拟议验收门槛，并非现有能力或客户调查结果。
+
 
 ---
 
@@ -302,5 +300,3 @@ flowchart LR
 - **[H6]** Figure, *Helix 2.5: Zero-Shot 30-Home Generalization*, 2026-09-17：https://www.figure.ai/news/helix-2-5-zero-shot-30-home-generalization
 - **[H7]** Enabot, *EBO X official product and store*：https://www.enabot.com/home-robot/ebo-x ；https://store.enabot.com/products/ebo-x-familybot
 - **[H8]** ISO, *ISO 13482:2014 — Safety requirements for personal care robots*：https://www.iso.org/standard/53820.html
-
-> **尚缺证据：** 中国目标市场下的真实家庭用户需求、付费意愿、物料与售后报价、保险/责任成本、跨户部署性能和适用的本地认证路径。这些内容均未写成已验证事实。
