@@ -45,11 +45,10 @@ const { title, description, lang, setOGTypeArticle, headings = [], projectNaviga
 
         <!-- Main column -->
         <div class="min-w-0">
-            <!-- Hero slot -->
-            <slot name="hero"></slot>
-
             <main id="swup-container" class="transition-swup-fade w-full">
                 <div id="content-wrapper" class="onload-animation">
+                    <!-- Keep the page-specific hero inside Swup's replacement container. -->
+                    <slot name="hero"></slot>
                     <slot></slot>
                 </div>
             </main>
