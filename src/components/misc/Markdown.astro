@@ -18,6 +18,25 @@ const className = Astro.props.class;
         /* Long URLs must wrap instead of expanding the mobile viewport. */
         overflow-wrap: anywhere;
     }
+
+    .custom-md :global(.portfolio-demo-video) {
+        display: block;
+        width: 100%;
+        max-width: 22rem;
+        height: auto;
+        max-height: 18rem;
+        object-fit: contain;
+        border-radius: 0.5rem;
+        background: #111;
+    }
+
+    .custom-md :global(.portfolio-demo-video:fullscreen) {
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        max-height: none;
+        border-radius: 0;
+    }
 </style>
 
 <script>

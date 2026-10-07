@@ -211,7 +211,7 @@ flowchart LR
 
 演示通过飞书请求本机文件，并将文件发回当前会话。
 
-<video controls preload="metadata" style="display: block; width: 100%; max-width: 48rem;">
+<video class="portfolio-demo-video" controls playsinline preload="metadata" aria-label="TeleBot 文件收发功能演示">
   <source src="/videos/telebot/file-transfer.mp4" type="video/mp4">
   当前环境不支持内嵌播放，可<a href="/videos/telebot/file-transfer.mp4">直接打开视频</a>。
 </video>
@@ -272,7 +272,7 @@ Git 推送属于高于普通文本回复的影响操作，因此使用明确的�
 
 演示 TeleBot 将整理后的内容写入博客并推送发布。
 
-<video controls preload="metadata" style="display: block; width: 100%; max-width: 48rem;">
+<video class="portfolio-demo-video" controls playsinline preload="metadata" aria-label="TeleBot 博客推送功能演示">
   <source src="/videos/telebot/blog-publishing.mp4" type="video/mp4">
   当前环境不支持内嵌播放，可<a href="/videos/telebot/blog-publishing.mp4">直接打开视频</a>。
 </video>

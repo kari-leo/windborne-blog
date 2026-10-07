@@ -382,6 +382,21 @@ function init() {
 init();
 
 const setup = () => {
+	window.swup.hooks.before('content:replace', (visit: {
+		to: { url: string; hash?: string };
+		history: { popstate: boolean };
+		scroll: { animate: boolean };
+	}) => {
+		const destination = new URL(visit.to.url, window.location.href);
+		const portfolioRoot = url('/portfolio/');
+		const isPortfolio = pathsEqual(destination.pathname, portfolioRoot)
+			|| destination.pathname.startsWith(portfolioRoot);
+		if (isPortfolio && !visit.to.hash && !destination.hash && !visit.history.popstate) {
+			// Position the incoming page before it becomes visible.
+			visit.scroll.animate = false;
+			window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+		}
+	});
 	// TODO: temp solution to change the height of the banner
 /*
 	window.swup.hooks.on('animation:out:start', () => {

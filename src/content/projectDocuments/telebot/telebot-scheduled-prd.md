@@ -175,7 +175,7 @@ journey
 
 演示通过对话创建定时任务，到期执行后将结果发回飞书。
 
-<video controls preload="metadata" style="display: block; width: 100%; max-width: 48rem;">
+<video class="portfolio-demo-video" controls playsinline preload="metadata" aria-label="TeleBot 任务定时触发功能演示">
   <source src="/videos/telebot/scheduled-trigger.mp4" type="video/mp4">
   当前环境不支持内嵌播放，可<a href="/videos/telebot/scheduled-trigger.mp4">直接打开视频</a>。
 </video>
