@@ -337,7 +337,14 @@ flowchart LR
 
 本次产品能力的重点是**任务如何被创建、确认、调度、授权、执行和反馈**，而不是秋招 Skill 本身。
 
-观看[定时任务功能演示](/portfolio/telebot/telebot-scheduled-prd/#功能演示)，了解创建任务、到期触发和结果反馈的流程。
+### 功能演示
+
+演示通过对话创建定时任务，到期执行后将结果发回飞书。
+
+<video class="portfolio-demo-video" controls playsinline preload="metadata" aria-label="TeleBot 任务定时触发功能演示">
+  <source src="/videos/telebot/scheduled-trigger.mp4" type="video/mp4">
+  当前环境不支持内嵌播放，可<a href="/videos/telebot/scheduled-trigger.mp4">直接打开视频</a>。
+</video>
 
 ---
 
