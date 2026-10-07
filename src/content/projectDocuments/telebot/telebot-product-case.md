@@ -207,6 +207,15 @@ flowchart LR
 
 当前实现以 FastAPI 接收飞书事件，由 LangGraph ReAct Agent 进行任务处理；飞书通道负责事件解析、鉴权以及文本／文件发送，本地工具提供文件、搜索、报告和受限 Shell 等能力。会话状态通过 SQLite 持久化。
 
+### 功能演示
+
+演示通过飞书请求本机文件，并将文件发回当前会话。
+
+<video controls preload="metadata" style="display: block; width: 100%; max-width: 48rem;">
+  <source src="/videos/telebot/file-transfer.mp4" type="video/mp4">
+  当前环境不支持内嵌播放，可<a href="/videos/telebot/file-transfer.mp4">直接打开视频</a>。
+</video>
+
 ---
 
 ## 5.2 博客推送：让 AI 结果从“回复”走到“发布”
@@ -258,6 +267,15 @@ Git 推送属于高于普通文本回复的影响操作，因此使用明确的�
 这一模块把 TeleBot 从“能回答问题”推进到“能完成交付”。用户在移动端完成的不再只是一次对话，而是：
 
 > **提出内容任务 → 本机生成文件 → 用户确认 → 发布结果返回**
+
+### 功能演示
+
+演示 TeleBot 将整理后的内容写入博客并推送发布。
+
+<video controls preload="metadata" style="display: block; width: 100%; max-width: 48rem;">
+  <source src="/videos/telebot/blog-publishing.mp4" type="video/mp4">
+  当前环境不支持内嵌播放，可<a href="/videos/telebot/blog-publishing.mp4">直接打开视频</a>。
+</video>
 
 ---
 
@@ -318,6 +336,8 @@ flowchart LR
 > 每周指定时间调用已有的第三方秋招岗位 Skill，完成检索后把结果发回飞书。
 
 本次产品能力的重点是**任务如何被创建、确认、调度、授权、执行和反馈**，而不是秋招 Skill 本身。
+
+观看[定时任务功能演示](/portfolio/telebot/telebot-scheduled-prd/#功能演示)，了解创建任务、到期触发和结果反馈的流程。
 
 ---
 

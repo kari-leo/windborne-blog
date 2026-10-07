@@ -171,6 +171,15 @@ journey
 
 这意味着系统第一次需要对“未来的执行权”负责，因此任务确认、执行授权、状态记录和异常反馈都成为核心体验的一部分。
 
+### 功能演示
+
+演示通过对话创建定时任务，到期执行后将结果发回飞书。
+
+<video controls preload="metadata" style="display: block; width: 100%; max-width: 48rem;">
+  <source src="/videos/telebot/scheduled-trigger.mp4" type="video/mp4">
+  当前环境不支持内嵌播放，可<a href="/videos/telebot/scheduled-trigger.mp4">直接打开视频</a>。
+</video>
+
 ---
 
 # 06 用户流程
