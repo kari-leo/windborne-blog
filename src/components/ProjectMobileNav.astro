@@ -14,7 +14,7 @@ const current = documents.find((entry) => entry.slug.split("/").at(-1) === activ
 
 <details class="mb-8 rounded-lg border border-[var(--line-color)] bg-[var(--card-bg)] lg:hidden">
 	<summary class="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm text-[var(--deep-text)] marker:hidden">
-		<span class="min-w-0 truncate"><span class="mr-2 text-[var(--btn-content)]">{project.data.title}</span> / {current?.data.title ?? "项目概览"}</span>
+		<span class="min-w-0 truncate"><span class="mr-2 text-[var(--btn-content)]">{project.data.title}</span> / {current?.data.navTitle ?? current?.data.title ?? "项目概览"}</span>
 		<span aria-hidden="true" class="text-[var(--btn-content)]">&#9662;</span>
 	</summary>
 	<nav aria-label={`${project.data.title} 文档导航`} class="flex flex-col gap-1 border-t border-[var(--line-color)] px-4 py-3 text-sm">
@@ -22,7 +22,7 @@ const current = documents.find((entry) => entry.slug.split("/").at(-1) === activ
 		<a href={getProjectUrlBySlug(project.slug)} aria-current={!activeSlug ? "page" : undefined} class:list={["rounded px-2 py-2", !activeSlug ? "bg-[var(--btn-plain-bg-hover)] font-semibold text-[var(--primary)]" : "text-[var(--btn-content)] hover:text-[var(--primary)]"]}>项目概览</a>
 		{documents.map((entry) => {
 			const slug = entry.slug.split("/").at(-1) ?? entry.slug;
-			return <a href={getProjectDocumentUrl(project.slug, slug)} aria-current={activeSlug === slug ? "page" : undefined} class:list={["rounded px-2 py-2", activeSlug === slug ? "bg-[var(--btn-plain-bg-hover)] font-semibold text-[var(--primary)]" : "text-[var(--btn-content)] hover:text-[var(--primary)]"]}>{entry.data.title}</a>;
+			return <a href={getProjectDocumentUrl(project.slug, slug)} aria-current={activeSlug === slug ? "page" : undefined} class:list={["rounded px-2 py-2", activeSlug === slug ? "bg-[var(--btn-plain-bg-hover)] font-semibold text-[var(--primary)]" : "text-[var(--btn-content)] hover:text-[var(--primary)]"]}>{entry.data.navTitle ?? entry.data.title}</a>;
 		})}
 	</nav>
 </details>

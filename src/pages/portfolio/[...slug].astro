@@ -1,5 +1,6 @@
 ---
 import Markdown from "@components/misc/Markdown.astro";
+import PortfolioOverview from "@components/homeagent/PortfolioOverview.astro";
 import ProjectMobileNav from "@components/ProjectMobileNav.astro";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { getProjectDocuments, getSortedProjects } from "@utils/content-utils";
@@ -20,9 +21,9 @@ const documentSlug = (document: (typeof documents)[number]) => document.slug.spl
 ---
 
 <MainGridLayout title={`${entry.data.title} · 作品集`} description={entry.data.description} projectNavigation={{ project: entry, documents }}>
-	<div class="min-w-0 pb-16 pt-12" data-pagefind-ignore>
+	<div class="min-w-0 pb-16 pt-12" data-pagefind-ignore={entry.slug !== "homeagent" ? true : undefined}>
 		<ProjectMobileNav project={entry} documents={documents} />
-		<div data-pagefind-body>
+		{entry.slug === "homeagent" ? <PortfolioOverview documents={documents} /> : <div data-pagefind-body>
 			<div class="mb-9 border-b border-[var(--line-color)] pb-8">
 				<p class="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--btn-content)]">{entry.data.status} / 项目概览</p>
 				<h1 class="serif mb-5 text-[clamp(2.5rem,5vw,4rem)] leading-none text-[var(--deep-text)]">{entry.data.title}</h1>
@@ -47,5 +48,6 @@ const documentSlug = (document: (typeof documents)[number]) => document.slug.spl
 					</div>
 				) : <p class="text-sm text-[var(--btn-content)]">文档整理中。</p>}
 			</section>
+		</div>}
 	</div>
 </MainGridLayout>

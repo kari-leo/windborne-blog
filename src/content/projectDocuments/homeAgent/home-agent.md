@@ -1,8 +1,9 @@
 ---
 project: homeagent
 title: HomeAgent｜智能家庭通用物理执行终端
+navTitle: HomeAgent 产品说明
 description: 家庭物理执行终端的市场机会、场景选择、产品边界与验证计划。
-order: 1
+order: 40
 ---
 
 # HomeAgent｜智能家庭通用物理执行终端

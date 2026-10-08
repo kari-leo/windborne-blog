@@ -1,5 +1,7 @@
 ---
 import Markdown from "@components/misc/Markdown.astro";
+import DecisionPath from "@components/homeagent/DecisionPath.astro";
+import ProductShowcase from "@components/homeagent/ProductShowcase.astro";
 import ProjectMobileNav from "@components/ProjectMobileNav.astro";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { getProjectDocuments, getSortedProjects } from "@utils/content-utils";
@@ -20,6 +22,7 @@ export async function getStaticPaths() {
 const { project, document, documents } = Astro.props;
 const activeSlug = document.slug.split("/").at(-1) ?? document.slug;
 const { Content, headings } = await document.render();
+const showcaseProduct = project.slug === "homeagent" ? (activeSlug === "homeagent-showcase" ? "homeagent" : activeSlug === "retask-showcase" ? "retask" : undefined) : undefined;
 ---
 
 <MainGridLayout title={`${document.data.title} · ${project.data.title}`} description={document.data.description} headings={headings} projectNavigation={{ project, documents, activeSlug }}>
@@ -31,7 +34,9 @@ const { Content, headings } = await document.render();
 				<h1 class="serif mb-3 text-[clamp(2rem,4vw,3.25rem)] leading-tight text-[var(--deep-text)]">{document.data.title}</h1>
 				{document.data.description && <p class="text-sm leading-relaxed text-[var(--btn-content)]">{document.data.description}</p>}
 			</div>
+			{project.slug === "homeagent" && activeSlug === "decision-case-study" && <DecisionPath />}
 			<Markdown class="markdown-content"><Content /></Markdown>
+			{showcaseProduct && <ProductShowcase product={showcaseProduct} />}
 		</article>
 	</div>
 </MainGridLayout>

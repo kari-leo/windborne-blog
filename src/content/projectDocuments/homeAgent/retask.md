@@ -1,8 +1,9 @@
 ---
 project: homeagent
 title: 迁作 ReTask｜可重配置仓储移动操作系统
+navTitle: ReTask 产品说明
 description: 面向 3PL 仓库的移动操作产品构想、竞品比较与商业化验证计划。
-order: 2
+order: 50
 ---
 
 # 迁作 ReTask｜可重配置仓储移动操作系统

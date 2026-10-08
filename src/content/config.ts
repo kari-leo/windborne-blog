@@ -40,6 +40,7 @@ const projectDocumentsCollection = defineCollection({
 	schema: z.object({
 		project: z.string(),
 		title: z.string(),
+		navTitle: z.string().optional(),
 		description: z.string().optional().default(""),
 		order: z.number().optional().default(0),
 		draft: z.boolean().optional().default(false),

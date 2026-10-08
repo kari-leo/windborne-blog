@@ -24,7 +24,7 @@ const documentSlug = (entry: CollectionEntry<"projectDocuments">) => entry.slug.
 		</a>
 		{documents.map((entry, index) => (
 			<a href={getProjectDocumentUrl(project.slug, documentSlug(entry))} class:list={["document-link", activeSlug === documentSlug(entry) && "active"]} aria-current={activeSlug === documentSlug(entry) ? "page" : undefined}>
-				<span class="document-marker"></span><span class="document-index">{String(index + 1).padStart(2, "0")}</span>{entry.data.title}
+				<span class="document-marker"></span>{project.slug !== "homeagent" && <span class="document-index">{String(index + 1).padStart(2, "0")}</span>}{entry.data.navTitle ?? entry.data.title}
 			</a>
 		))}
 	</nav>

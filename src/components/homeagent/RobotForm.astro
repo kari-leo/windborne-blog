@@ -1,0 +1,57 @@
+---
+interface Props { product: "homeagent" | "retask"; compact?: boolean; }
+const { product, compact = false } = Astro.props;
+const home = product === "homeagent";
+const modules = home
+  ? ["移动感知：观察授权区域与预设物品", "受限操作臂：轻小物品取放", "轮式底盘：单层室内导航与避障", "本地中控：权限、任务与安全控制"]
+  : ["感知模块：识别受支持的包裹与姿态", "操作臂与末端：按包裹谱评估配置", "移动底盘：预认证工位之间迁移", "任务与安全控制：技能版本、校准与急停"];
+---
+<figure class:list={["robot-form", home ? "home" : "warehouse", compact && "compact"]}>
+  <svg viewBox="0 0 520 330" role="img" aria-label={home ? "HomeAgent 概念结构：移动感知、受限操作臂、轮式底盘与本地中控" : "ReTask 概念结构：感知模块、可配置末端与操作臂、移动底盘、任务与安全控制"}>
+    <g class="grid" fill="none" stroke="currentColor" stroke-width="1">
+      <path d="M40 270H480M70 295H450M100 320H420M130 245L70 320M200 245L175 320M270 245L280 320M340 245L385 320M410 245L490 310" />
+    </g>
+    <ellipse cx="259" cy="282" rx="112" ry="17" class="shadow" />
+    <g stroke="currentColor" stroke-width="2.5" stroke-linejoin="round">
+      <path d="M180 244L287 227L340 249L233 270Z" class="body" />
+      <path d="M180 244V269L233 290L340 270V249L233 270Z" class="body" />
+      <path d="M233 270V290" fill="none" />
+      <rect x="189" y="268" width="29" height="17" rx="7" class="wheel" />
+      <rect x="303" y="266" width="29" height="17" rx="7" class="wheel" />
+      <path d="M224 241V143L262 135L280 145V232L245 248Z" class="body" />
+      <path d="M245 248V153L280 145M224 143L245 153" fill="none" />
+      <path d="M242 139V105" fill="none" stroke-width="8" />
+      <rect x="214" y="78" width="68" height="34" rx={home ? 14 : 5} class="body" />
+      <rect x="224" y="88" width="47" height="13" rx="6" class="sensor" />
+      <circle cx="235" cy="94" r="3" class="light" stroke="none" />
+      <circle cx="260" cy="94" r="3" class="light" stroke="none" />
+      <path d="M280 158L313 128L353 164L381 145" fill="none" stroke-width={home ? 15 : 20} class="arm" />
+      <circle cx="280" cy="158" r="12" class="joint" />
+      <circle cx="313" cy="128" r="10" class="joint" />
+      <circle cx="353" cy="164" r="9" class="joint" />
+      <path d="M380 141L397 142L398 158M380 148L385 166L398 166" fill="none" stroke-width="4" class="grip" />
+      <rect x="252" y="182" width="16" height="25" rx="3" class="sensor" />
+      <circle cx="260" cy="217" r="4" fill="#d97757" stroke="none" />
+      {!home && <path d="M181 253L219 266M296 245L332 255" class="stripe" stroke-width="5" />}
+    </g>
+    {!compact && <g class="callouts" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M217 88H156L134 62H82M381 148H433V100H459M191 254H104V232H73M268 194H432V219H459" />
+      {[{x:70,y:62,n:1},{x:471,y:100,n:2},{x:61,y:232,n:3},{x:471,y:219,n:4}].map(({x,y,n}) => <g><circle cx={x} cy={y} r="15" class="badge" /><text x={x} y={y + 5} text-anchor="middle" stroke="none" fill="currentColor">{n}</text></g>)}
+    </g>}
+  </svg>
+  {!compact && <figcaption><span class="caption">产品结构概念图</span><ol>{modules.map((module) => <li>{module}</li>)}</ol></figcaption>}
+</figure>
+<style>
+  .robot-form { --robot-accent: #b57a45; margin: 0; color: var(--deep-text); }
+  .warehouse { --robot-accent: var(--primary); }
+  svg { display: block; width: 100%; height: auto; }
+  .grid { opacity: .12; } .shadow { fill: var(--deep-text); opacity: .05; }
+  .body { fill: var(--card-bg); } .wheel { fill: var(--btn-content); } .sensor { fill: var(--deep-text); }
+  .light { fill: var(--robot-accent); } .arm, .grip { stroke: var(--robot-accent); }
+  .joint, .badge { fill: var(--card-bg); } .stripe { stroke: var(--robot-accent); }
+  .callouts { color: var(--robot-accent); } .callouts text { font: 600 15px sans-serif; }
+  .caption { display: block; color: var(--btn-content); font-size: .75rem; }
+  figcaption { padding: 0 1.25rem 1.25rem; } ol { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem 1.75rem; list-style: decimal; padding-left: 1.2rem; margin-top: 1rem; font-size: .8rem; line-height: 1.6; }
+  li::marker { color: var(--robot-accent); font-weight: 600; }
+  @media (max-width: 480px) { ol { grid-template-columns: 1fr; } }
+</style>
