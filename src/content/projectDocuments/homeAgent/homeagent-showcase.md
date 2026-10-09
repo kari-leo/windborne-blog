@@ -2,7 +2,7 @@
 project: homeagent
 title: HomeAgent｜产品概念与操作界面
 navTitle: HomeAgent 产品设计
-description: 从轮式移动终端、预设轻小物品取送场景与静态界面原型，理解家庭物理执行终端的产品定义。
+description: 从床上休息时的室内取书场景、产品形态与可操作模拟原型，理解家庭物理执行终端的产品定义。
 order: 20
 ---
 

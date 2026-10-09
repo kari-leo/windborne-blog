@@ -1,12 +1,11 @@
 ---
-import { profileConfig } from "../config";
+import { siteConfig } from "../config";
 const currentYear = new Date().getFullYear();
 ---
 
 <footer class="mt-20 mb-12 reveal">
   <div class="soft-divider mb-8"></div>
   <div class="flex items-center justify-between text-xs text-[var(--btn-content)]">
-    <span>&copy; {currentYear} {profileConfig.name}</span>
-    <span class="serif italic">— thanks for reading.</span>
+    <span>&copy; {currentYear} {siteConfig.title}</span>
   </div>
 </footer>

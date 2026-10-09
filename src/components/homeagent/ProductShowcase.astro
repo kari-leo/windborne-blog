@@ -1,45 +1,38 @@
 ---
 import { getProjectDocumentUrl } from "@utils/url-utils";
 import RobotForm from "./RobotForm.astro";
+import HomePrototype from "./HomePrototype.svelte";
+import ReTaskPrototype from "./ReTaskPrototype.svelte";
 interface Props { product: "homeagent" | "retask"; }
 const { product } = Astro.props;
 const home = product === "homeagent";
 const name = home ? "HomeAgent" : "迁作 ReTask";
 const doc = (slug: string) => getProjectDocumentUrl("homeagent", slug);
-const screens = home ? [
-  { title: "发起任务", subtitle: "选择受支持的物品与预设位置", label: "新建取送", fields: [["物品", "已登记书籍"], ["取物点", "客厅 · 预设置物台"], ["交付点", "书房 · 预设交付台"], ["接收者", "已授权家庭成员"]], action: "检查任务范围 →" },
-  { title: "确认执行", subtitle: "任务先经过权限与能力边界检查", label: "执行前确认", fields: [["区域", "单层 · 已授权路线"], ["物品", "支持范围内的轻小物品"], ["影像", "本地处理 · 远程查看另行授权"], ["失败策略", "停止并通知发起者"]], action: "确认委托" },
-  { title: "查看进度", subtitle: "每一步都能看到当前状态", label: "取送任务 · 状态示例", fields: [["导航至取物点", "已完成"], ["识别与取放", "进行中"], ["运送与放置确认", "待执行"], ["结果反馈", "待执行"]], action: "请求安全停止" },
-  { title: "处理异常", subtitle: "低置信度时解释原因并交回控制", label: "需要你的确认", fields: [["异常原因", "物品位置与预设不符"], ["当前状态", "任务暂停 · 操作已停止"], ["可选下一步", "确认位置 / 请求有限协助"], ["结束任务", "保留原因与状态记录"]], action: "结束任务" },
-] : [
-  { title: "选择工位", subtitle: "在预认证候选工位内选择任务", label: "工位管理", fields: [["工位 A", "受限包裹重新上件 · 当前候选"], ["工位 B", "第二工位上件 · 复用候选"], ["设备位置", "工位 A · 示意"], ["工位条件", "任务范围与安全边界需确认"]], action: "选择工位 A →" },
-  { title: "任务配置", subtitle: "明确物品范围、技能与工位配置", label: "任务 A · 配置示例", fields: [["任务", "姿态调整 / 重新上件"], ["物品集", "经验证的包装范围"], ["技能与末端", "匹配当前工位的认证版本"], ["启动前", "校准、安全与产线互锁检查"]], action: "检查并确认配置" },
-  { title: "运行状态", subtitle: "观察任务、设备与异常分流", label: "工位 A · 状态示例", fields: [["任务状态", "受限操作进行中"], ["设备位置", "工位 A 作业区"], ["物品状态", "识别 → 取放 → 结果确认"], ["后续候选", "空闲窗口评估 A → B 迁移"]], action: "请求停止作业" },
-  { title: "异常与切换", subtitle: "条件不满足时保留明确回退", label: "A → B · 暂不可启动", fields: [["当前状态", "工位 B 校准尚未确认"], ["阻断原因", "目标工位启动条件不完整"], ["处置入口", "查看配置 / 请求现场处理"], ["回退", "保持安全停止，必要时转人工"]], action: "返回配置检查" },
-];
 ---
 <div class:list={["showcase", home ? "home" : "warehouse"]} data-pagefind-body>
-  <nav class="showcase-nav" aria-label={`${name} 展示页导航`}><a href="#form">产品形态</a><a href="#scenario">使用场景</a><a href="#interface">操作界面</a><a href="#demo">Demo <span>待开发</span></a></nav>
+  <nav class="showcase-nav" aria-label={`${name} 展示页导航`}><a href="#form">产品形态</a><a href="#scenario">使用场景</a><a href="#interface">体验交互原型</a><a href="#demo">技术 Demo <span>规划中</span></a></nav>
 
   <section id="form" aria-labelledby="form-heading">
-    <div class="section-heading"><span>01 / FORM & SYSTEM</span><h2 id="form-heading">{home ? "家庭中的受限物理执行终端" : "面向任务重配置的移动操作系统"}</h2></div>
-    <p class="intro">{home ? "室内轮式底盘与受限操作臂组合，接入家庭本地中控。形态服务于预设取送任务，不预设人形，也不表示能够执行任意家务。" : "轮式移动底盘、感知、操作臂与按包裹谱评估的末端共同构成操作单元。模块关系为概念设计，负载、尺寸与末端规格尚待任务数据确定。"}</p>
-    <div class="form-panel"><RobotForm product={product} /><div class="system-chain"><span>{home ? "家庭成员 · App / 语音" : "现场操作员 · 任务入口"}</span><span aria-hidden="true">↓</span><span>{home ? "本地中控 · 权限与任务调度" : "任务编排 · 工位配置 / 技能库"}</span><span aria-hidden="true">↓</span><span>移动 / 感知 / 受限操作</span><span aria-hidden="true">↔</span><span>独立安全控制 / 停止 / 异常反馈</span></div></div>
+    <div class="section-heading"><span>01 / FORM & SYSTEM</span><h2 id="form-heading">{home ? "轻量机器人，与独立本地中控协同" : "面向工业负载与刚度的移动操作系统"}</h2></div>
+    <p class="intro">{home ? "轻量小型的轮式本体与受限操作臂适配家庭通行和轻小物品取送。本地中控是独立部署的机箱，通过本地网络与机器人协同；家庭权限与任务调度由中控承接，运动控制和安全停止保留在机器人本体。" : "宽轮距、低重心的承载底盘，加固安装基座与粗壮操作臂，表达面向工业环境的高负载、高刚度设计方向。感知、可配置末端与本体安全控制形成操作单元；具体负载、刚度、尺寸与末端规格待包裹谱和工程评估确定。"}</p>
+    <div class="form-panel"><RobotForm product={product} /><div class="system-chain"><span>{home ? "家庭成员 · App / 语音" : "现场操作员 · 任务入口"}</span><span aria-hidden="true">↓</span><span>{home ? "独立中控机箱 · 权限 / 调度 / 家居协同" : "任务编排 · 工位配置 / 技能库"}</span><span class:list={[home && "bidirectional"]} aria-hidden="true">{home ? "↔" : "↓"}</span><span>{home ? "轻量机器人本体 · 移动 / 感知 / 受限取放" : "工业机器人本体 · 移动 / 感知 / 包裹操作"}</span><span class="bidirectional" aria-hidden="true">↔</span><span>本体独立安全控制 / 停止 / 异常反馈</span></div></div>
     <p class="note">{home ? "概念边界：授权的单层家庭、预设取物与交付位置、受支持的轻小物品；高层任务指令不能绕过本地安全与权限。" : "概念边界：受支持的包裹集与经过验证的工位；任务编排服从本地安全、校准与产线互锁。移动模块的必要性仍需与固定方案比较。"}</p>
   </section>
 
   <section id="scenario" aria-labelledby="scenario-heading">
-    <div class="section-heading"><span>02 / SCENARIO</span><h2 id="scenario-heading">{home ? "远程委托，一件有明确接收者的物品" : "先在工位 A 完成任务，再评估切换到 B"}</h2></div>
-    <p class="intro">{home ? "情境假设：发起者在外，家中一位已授权成员需要一本已登记书籍。机器人从客厅预设点取物，送至书房约定位置，发起者确认结果。任务频率与真实价值仍需用户研究。" : "候选情境：同一仓库的 A 工位处理受限包裹重新上件，B 工位承担第二上件任务。在两站错峰的窗口内，同一设备通过迁移、重新配置与校准切换任务。"}</p>
+    <div class="section-heading"><span>02 / SCENARIO</span><h2 id="scenario-heading">{home ? "在床上休息，让书来到身边" : "先在工位 A 完成任务，再评估切换到 B"}</h2></div>
+    <p class="intro">{home ? "概念情境：用户正在卧室床上休息，想读放在客厅预设位置的一本书，希望不为一次简单取物中断休息。用户选择书和床边指定安全交付区，确认任务；机器人模拟取书、运送和交付，用户确认收到后结束。" : "候选情境：同一仓库的 A 工位处理受限包裹重新上件，B 工位承担第二上件任务。在两站错峰的窗口内，同一设备通过迁移、重新配置与校准切换任务。"}</p>
+    {home && <div class="scenario-context"><div><h3>现有办法</h3><p>自己起身拿取、请在场家人帮忙，或提前把书放在手边；这些办法仍需行动、协调或事先准备。</p></div><div><h3>价值假设</h3><p>让机器人代为完成重复的短距离取送，减少状态中断。任务是否足够频繁、值得付费，仍需研究。</p></div><div><h3>适用边界</h3><p>限定已登记书籍、预设取物点、授权室内路线与床边安全交付区；不承诺任意物品操作或护理能力。</p></div></div>}
     <figure class="scene">
-      {home ? <svg viewBox="0 0 680 340" role="img" aria-label="家庭取送场景示意：客厅预设取物台，经授权通道到书房交付台；私密区域不进入">
+      {home ? <svg viewBox="0 0 680 340" role="img" aria-label="概念场景：用户在卧室床上休息，机器人沿授权路线从客厅预设位置取书，送至床边指定安全交付区">
         <g class="room" stroke-width="2"><rect x="25" y="25" width="270" height="185" rx="8" /><rect x="385" y="25" width="270" height="185" rx="8" /><rect x="25" y="235" width="630" height="80" rx="8" /></g>
-        <g class="furniture"><rect x="48" y="110" width="70" height="70" rx="4" /><rect x="530" y="110" width="96" height="65" rx="4" /><rect x="510" y="265" width="115" height="25" rx="4" /></g>
+        <g class="furniture"><rect x="48" y="110" width="70" height="70" rx="4" /><rect x="530" y="94" width="96" height="85" rx="4" /><rect x="540" y="102" width="33" height="19" rx="4" /><path d="M530 129H626" /><rect x="510" y="265" width="115" height="25" rx="4" /></g>
+        <rect x="416" y="124" width="80" height="50" rx="4" class="delivery-zone" />
         <rect x="67" y="127" width="30" height="12" rx="2" class="object" />
-        <path d="M125 155H225V220H450V150H520" class="route" />
-        <path d="M508 140L521 150L508 160" class="route-end" />
+        <path d="M125 155H225V220H456V175" class="route" />
+        <path d="M446 186L456 174L466 186" class="route-end" />
         <circle cx="336" cy="220" r="23" class="robot" /><text x="336" y="227" text-anchor="middle" class="robot-text">R</text>
-        <g class="map-text"><text x="48" y="61">客厅 · 预设取物点</text><text x="410" y="61">书房 · 预设交付点</text><text x="48" y="265">私密区域 / 禁入区</text><text x="48" y="293" class="secondary">权限边界不随任务扩大</text><text x="412" y="192" class="secondary">已授权成员接收</text></g>
+        <g class="map-text"><text x="48" y="61">客厅 · 预设取书点</text><text x="410" y="61">卧室 · 床边交付</text><text x="48" y="265">其他区域 / 禁入区</text><text x="48" y="293" class="secondary">权限边界不随任务扩大</text><text x="412" y="198" class="secondary">安全交付区</text><text x="539" y="198" class="secondary">用户休息</text></g>
       </svg> : <svg viewBox="0 0 680 340" role="img" aria-label="仓储候选工位示意：A 工位从异常缓冲位重新上件，经授权路线迁移到 B 工位；需校准与安全检查，异常包裹转人工">
         <g class="room" stroke-width="2"><rect x="25" y="25" width="280" height="190" rx="8" /><rect x="375" y="25" width="280" height="190" rx="8" /><rect x="25" y="245" width="190" height="70" rx="8" /></g>
         <g class="furniture"><rect x="48" y="103" width="100" height="65" rx="4" /><rect x="185" y="100" width="95" height="70" rx="4" /><rect x="402" y="105" width="92" height="65" rx="4" /><rect x="530" y="100" width="100" height="70" rx="4" /></g>
@@ -48,34 +41,22 @@ const screens = home ? [
         <circle cx="165" cy="145" r="20" class="robot" /><text x="165" y="152" text-anchor="middle" class="robot-text">R</text>
         <g class="map-text"><text x="48" y="61">A · 包裹重新上件</text><text x="400" y="61">B · 第二工位上件</text><text x="48" y="193" class="secondary">异常缓冲 → 指定输送点</text><text x="400" y="194" class="secondary">校准 / 技能 / 安全检查</text><text x="44" y="287">异常件 → 人工</text><text x="262" y="286" class="secondary">错峰窗口迁移 · 工位概念图</text></g>
       </svg>}
-      <figcaption><span class="legend-key"></span> 授权路线 / 迁移示意 <span class="legend-object"></span> {home ? "受支持物品" : "受限包裹"} <span class="legend-robot">R</span> 机器人部署位置</figcaption>
+      <figcaption><span>概念场景</span><span class="legend-key"></span> 授权路线 / 迁移示意 <span class="legend-object"></span> {home ? "书 · 支持物品" : "受限包裹"} <span class="legend-robot">R</span> 机器人部署位置</figcaption>
     </figure>
-    <ol class="task-flow">{(home ? ["成员发起取送", "权限 / 能力检查", "导航与受限取放", "交付与结果确认"] : ["A 工位受限操作", "评估错峰与共享", "迁移 / 配置 / 校准", "B 工位检查后执行"]).map((step, index) => <li><span>0{index + 1}</span>{step}</li>)}</ol>
-    <p class="note">{home ? "异常支路：权限不足或超出支持范围时解释限制；低置信度、抓取失败或不安全时停止并通知，必要时请求有限协助。" : "反证条件：若两站峰值重叠、固定机构可覆盖两站，或重新配置节约不足以覆盖迁移与运维代价，应缩小范围或转向固定方案。"}</p>
+    <ol class="task-flow">{(home ? ["选择书与床边交付区", "确认范围与授权", "模拟取书与运送", "送达通知 / 用户确认"] : ["A 工位受限操作", "评估错峰与共享", "迁移 / 配置 / 校准", "B 工位检查后执行"]).map((step, index) => <li><span>0{index + 1}</span>{step}</li>)}</ol>
+    <p class="note">{home ? "送达后等待用户确认，确认前不显示完成。书不在预设位置或床边交付区被占用时暂停，允许处理后重试、取消或转人工。以下均为概念方案与模拟交互。" : "反证条件：若两站峰值重叠、固定机构可覆盖两站，或重新配置节约不足以覆盖迁移与运维代价，应缩小范围或转向固定方案。"}</p>
   </section>
 
   <section id="interface" aria-labelledby="interface-heading">
-    <div class="section-heading"><span>03 / INTERFACE PROTOTYPE</span><h2 id="interface-heading">{home ? "把委托过程与控制权说清楚" : "让任务配置、运行与异常状态可见"}</h2></div>
-    <p class="intro">{home ? "发起任务、确认权限、查看进度与异常处理，组成一次完整的取送委托。" : "围绕工位选择、任务配置、运行监控与异常回退，组织现场操作流程。"}<span class="prototype-label">静态界面原型</span></p>
-    <div class="screen-grid">{screens.map((screen, index) => <figure class="screen-figure">
-      <figcaption><span>0{index + 1}</span><div><h3>{screen.title}</h3><p>{screen.subtitle}</p></div></figcaption>
-      <div class:list={["ui-screen", index === 3 && "exception"]} role="img" aria-label={`${name} 静态界面：${screen.title}，${screen.fields.map(([label,value])=>`${label}：${value}`).join("；")}`}>
-        <div class="ui-topbar"><span>{name}</span><span>原型示意</span></div>
-        <div class="ui-body"><p class="ui-context">{home ? "我的家庭 / 取送任务" : "工作台 / 工位任务"}</p><h4>{screen.label}</h4>
-          {index === 3 && <div class="ui-alert">{home ? "物品不确定 · 请先确认" : "切换被阻断 · 请检查目标工位"}</div>}
-          <dl>{screen.fields.map(([label, value]) => <div><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
-          {index === 2 && <div class="ui-progress"><span></span><span></span><span></span><span></span></div>}
-          <span class="ui-button" aria-hidden="true">{screen.action}</span>
-          <p class="ui-footer">静态示例 · 未连接设备</p>
-        </div>
-      </div>
-    </figure>)}</div>
+    <div class="section-heading"><span>03 / INTERFACE PROTOTYPE</span><h2 id="interface-heading">{home ? "亲自完成一次床边取书" : "亲自完成 A → B 的切换"}</h2></div>
+    <p class="intro">{home ? "选择任务、确认权限、推进取送并确认收到；切换模拟情境可体验失败与恢复。" : "申请切换、完成前置检查、迁移与配置；校准通过后进入 B 就绪，再授权启动。也可触发校准失败并恢复。"}<span class="prototype-label">交互原型（模拟） · 本地状态演示</span></p>
+    {home ? <HomePrototype client:load /> : <ReTaskPrototype client:load />}
+    <noscript><p class="note">请启用 JavaScript 体验可交互原型；本页的产品形态与场景说明仍可阅读。</p></noscript>
   </section>
 
   <section id="demo" class="demo-placeholder" aria-labelledby="demo-heading">
-    <div><span class="small-label">04 / DEMO</span><h2 id="demo-heading">{name} 交互 / 技术原型</h2><p>{home ? "家庭取送的任务委托、权限确认与受限物理执行。" : "仓储包裹操作、工位切换与重新配置。"}</p></div><span class="development-status">待开发</span>
+    <div><span class="small-label">04 / TECHNICAL DEMO</span><h2 id="demo-heading">{name} 技术 Demo</h2><p>{home ? "真实设备取书、视觉识别与受限物理执行尚未实现；与上方可体验的前端交互原型分开。" : "真实设备迁移、产线连接与操作执行尚未实现；与上方可体验的前端交互原型分开。"}</p></div><span class="development-status">规划中</span>
   </section>
-  {!home && <a class="prd-card" href={doc("retask-reconfiguration-prd")}><div><span class="small-label">专项 PRD / 内容待完善</span><h2>跨工位任务切换与重新配置功能 PRD</h2><p>同一设备在不同工位之间切换任务、复用技能与重新配置的功能定义。</p></div><span aria-hidden="true">↗</span></a>}
   <div class="related-links"><a href={doc(home ? "home-agent" : "retask")}>阅读 {name} 完整产品说明 →</a><a href={doc("decision-case-study")}>查看关键决策 Case Study →</a></div>
 </div>
 
@@ -86,12 +67,14 @@ const screens = home ? [
   section { padding-top: 2.5rem; scroll-margin-top: 6rem; } .section-heading > span, .small-label { font-size: .65rem; letter-spacing: .13em; color: var(--concept-accent); } h2 { font-size: clamp(1.35rem, 2.5vw, 1.7rem); margin-top: .6rem; line-height: 1.6; } .intro { font-size: .9rem; color: var(--btn-content); line-height: 1.9; margin: 1rem 0 1.5rem; }
   .form-panel { border: 1px solid var(--line-color); border-radius: .6rem; background: var(--card-bg); overflow: hidden; } .form-panel :global(.robot-form) { max-width: 37rem; margin: auto; } .system-chain { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .6rem; padding: 1.25rem; border-top: 1px solid var(--line-color); font-size: .75rem; line-height: 1.6; background: var(--btn-regular-bg); } .system-chain span:nth-child(even) { color: var(--concept-accent); }
   .note { margin-top: 1rem; border-left: 2px solid var(--concept-accent); padding-left: .85rem; color: var(--btn-content); font-size: .8rem; line-height: 1.9; }
+  .scenario-context { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .scenario-context > div { padding-left: .875rem; border-left: 2px solid var(--line-color); }
+  .scenario-context h3 { font-size: .875rem; font-weight: 600; } .scenario-context p { font-size: .8125rem; line-height: 1.85; color: var(--btn-content); margin-top: .5rem; }
+  .delivery-zone { fill: var(--card-bg); stroke: var(--concept-accent); stroke-width: 2; stroke-dasharray: 5 4; }
   .scene { background: var(--btn-regular-bg); border: 1px solid var(--line-color); border-radius: .5rem; overflow: hidden; } .scene svg { width: 100%; height: auto; display: block; } .room { fill: var(--card-bg); stroke: var(--line-color); } .furniture { fill: var(--btn-regular-bg); stroke: var(--btn-content); stroke-width: 1; } .object { fill: var(--concept-accent); opacity: .8; } .route { fill: none; stroke: var(--concept-accent); stroke-width: 3; stroke-dasharray: 7 6; } .route-end { fill: none; stroke: var(--concept-accent); stroke-width: 3; } .robot { fill: var(--deep-text); } .robot-text { fill: var(--card-bg); font: 600 21px sans-serif; } .map-text { fill: var(--deep-text); font: 20px sans-serif; } .secondary { font-size: 17px; fill: var(--btn-content); }
   .scene figcaption { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; padding: 1rem 1.25rem; border-top: 1px solid var(--line-color); font-size: .7rem; color: var(--btn-content); } .legend-key { width: 1.3rem; border-top: 2px dashed var(--concept-accent); } .legend-object { width: .7rem; height: .7rem; background: var(--concept-accent); margin-left: .5rem; } .legend-robot { padding: 0 .3rem; font-size: .65rem; color: var(--card-bg); background: var(--deep-text); border-radius: 50%; margin-left: .5rem; }
   .task-flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8rem; margin-top: 1.2rem; list-style: none; } .task-flow li { border-top: 2px solid var(--line-color); padding-top: .7rem; font-size: .75rem; line-height: 1.8; } .task-flow span { display: block; color: var(--concept-accent); font-size: .65rem; margin-bottom: .4rem; }
-  .screen-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.75rem 1.25rem; } .screen-figure > figcaption { display: flex; gap: .8rem; min-height: 4.4rem; } .screen-figure > figcaption > span { color: var(--concept-accent); font-size: .75rem; margin-top: .1rem; } h3 { font-size: .95rem; } .screen-figure > figcaption p { color: var(--btn-content); font-size: .75rem; line-height: 1.8; margin-top: .3rem; }
-  .ui-screen { border: 1px solid var(--line-color); border-radius: .7rem; overflow: hidden; background: var(--card-bg); height: calc(100% - 4.4rem); } .ui-topbar { display: flex; justify-content: space-between; gap: .5rem; padding: .85rem 1rem; font-size: .7rem; background: var(--btn-regular-bg); border-bottom: 1px solid var(--line-color); } .ui-topbar span:last-child { color: var(--btn-content); } .ui-body { padding: 1.2rem; } .ui-context { color: var(--btn-content); font-size: .65rem; } h4 { margin: .6rem 0 1rem; font-size: 1rem; font-weight: 600; line-height: 1.5; } dl > div { padding: .8rem 0; border-top: 1px solid var(--line-color); } dt { color: var(--btn-content); font-size: .65rem; } dd { font-size: .8rem; line-height: 1.8; margin-top: .3rem; } .ui-button { display: block; padding: .7rem .9rem; background: var(--deep-text); color: var(--card-bg); font-size: .75rem; text-align: center; border-radius: .35rem; margin-top: .8rem; } .ui-footer { text-align: center; font-size: .6rem; color: var(--btn-content); margin-top: .75rem; } .ui-alert { border-left: 2px solid #c78542; background: var(--btn-regular-bg); padding: .65rem .8rem; font-size: .75rem; line-height: 1.8; margin-bottom: 1rem; } .ui-progress { display: grid; grid-template-columns: repeat(4, 1fr); gap: .3rem; margin: .8rem 0; } .ui-progress span { height: 3px; background: var(--line-color); } .ui-progress span:first-child { background: var(--concept-accent); } .ui-progress span:nth-child(2) { background: var(--concept-accent); opacity: .45; }
-  .demo-placeholder { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-top: 3rem; padding: 1.5rem; border: 1px dashed var(--btn-content); border-radius: .5rem; background: var(--btn-regular-bg); } .demo-placeholder h2, .prd-card h2 { font-size: 1.1rem; } .demo-placeholder p, .prd-card p { font-size: .8rem; color: var(--btn-content); line-height: 1.9; margin-top: .7rem; } .development-status { flex-shrink: 0; font-size: .7rem; border: 1px solid var(--line-color); border-radius: 2rem; padding: .3rem .65rem; color: var(--btn-content); }
-  .prd-card { display: flex; align-items: center; gap: 1rem; justify-content: space-between; margin-top: 1.2rem; border: 1px solid var(--line-color); padding: 1.5rem; border-radius: .5rem; } .prd-card > span { color: var(--primary); font-size: 1.7rem; } .prd-card:hover { border-color: var(--primary); } .related-links { display: flex; flex-wrap: wrap; gap: 1rem 2rem; margin-top: 2rem; font-size: .8rem; color: var(--primary); }
-  @media (max-width: 640px) { .screen-grid { grid-template-columns: 1fr; } .task-flow { grid-template-columns: 1fr 1fr; } .demo-placeholder { flex-direction: column-reverse; } .system-chain { flex-direction: column; } .system-chain span:nth-child(6) { transform: rotate(90deg); } }
+  .demo-placeholder { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-top: 3rem; padding: 1.5rem; border: 1px dashed var(--btn-content); border-radius: .5rem; background: var(--btn-regular-bg); } .demo-placeholder h2 { font-size: 1.1rem; } .demo-placeholder p { font-size: .8rem; color: var(--btn-content); line-height: 1.9; margin-top: .7rem; } .development-status { flex-shrink: 0; font-size: .7rem; border: 1px solid var(--line-color); border-radius: 2rem; padding: .3rem .65rem; color: var(--btn-content); }
+  .related-links { display: flex; flex-wrap: wrap; gap: 1rem 2rem; margin-top: 2rem; font-size: .8rem; color: var(--primary); }
+  @media (max-width: 640px) { .scenario-context { grid-template-columns: 1fr; } .task-flow { grid-template-columns: 1fr 1fr; } .demo-placeholder { flex-direction: column-reverse; } .system-chain { flex-direction: column; } .system-chain .bidirectional { transform: rotate(90deg); } }
 </style>

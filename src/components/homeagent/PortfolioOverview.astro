@@ -5,18 +5,17 @@ import RobotForm from "./RobotForm.astro";
 interface Props { documents: CollectionEntry<"projectDocuments">[]; }
 const { documents } = Astro.props;
 const doc = (slug: string) => getProjectDocumentUrl("homeagent", slug);
-type WorkKind = "design" | "decision" | "document" | "prd";
-type Preview = "homeagent" | "retask" | "decision" | "prd" | "document";
+type WorkKind = "design" | "decision" | "document";
+type Preview = "homeagent" | "retask" | "decision" | "document";
 interface WorkDetails { title: string; description: string; kind: WorkKind; preview: Preview; order: number; product?: string; }
 const details: Record<string, WorkDetails> = {
-  "homeagent-showcase": { title: "HomeAgent｜家庭物理执行终端", description: "预设轻小物品取送的产品形态、家庭场景与任务委托界面。", kind: "design", preview: "homeagent", order: 10 },
-  "retask-showcase": { title: "ReTask｜仓储移动操作系统", description: "受限包裹操作、两工位切换场景与现场配置界面。", kind: "design", preview: "retask", order: 20 },
+  "homeagent-showcase": { title: "HomeAgent｜家庭物理执行终端", description: "床上休息时取书的场景、产品形态与可操作交互原型。", kind: "design", preview: "homeagent", order: 10 },
+  "retask-showcase": { title: "ReTask｜仓储移动操作系统", description: "受限包裹操作、两工位切换场景与成功 / 异常交互原型。", kind: "design", preview: "retask", order: 20 },
   "decision-case-study": { title: "从 HomeAgent 到 ReTask", description: "为什么转向 ToB、选择 3PL，并把通用能力收敛到具体工位？", kind: "decision", preview: "decision", order: 30 },
-  "retask-reconfiguration-prd": { title: "ReTask｜跨工位切换与重新配置", description: "同一设备切换工位时，需要更换哪些任务、技能与现场配置？", kind: "prd", preview: "prd", order: 40 },
-  "home-agent": { title: "HomeAgent｜产品说明", description: "家庭需求、候选任务、权限与安全边界，以及用户价值验证。", kind: "document", preview: "document", product: "HomeAgent", order: 50 },
+  "home-agent": { title: "HomeAgent｜产品说明", description: "家庭需求、候选任务、权限与安全边界，以及商业模式与竞品比较。", kind: "document", preview: "document", product: "HomeAgent", order: 50 },
   "retask": { title: "ReTask｜产品说明", description: "3PL 客户、包裹操作边界、系统模块与跨工位复用的经济性。", kind: "document", preview: "document", product: "ReTask", order: 60 },
 };
-const kindNames: Record<WorkKind, string> = { design: "产品设计", decision: "关键决策", document: "产品说明", prd: "专项 PRD" };
+const kindNames: Record<WorkKind, string> = { design: "产品设计", decision: "关键决策", document: "产品说明" };
 const works = documents.map((entry) => {
   const slug = entry.slug.split("/").at(-1) ?? entry.slug;
   const detail = details[slug] ?? { title: entry.data.title, description: entry.data.description, kind: "document" as const, preview: "document" as const, order: 100 + entry.data.order };
@@ -24,7 +23,7 @@ const works = documents.map((entry) => {
 }).sort((a, b) => a.order - b.order);
 const filters = [
   { key: "all", label: "全部" }, { key: "design", label: "产品设计" },
-  { key: "decision", label: "关键决策" }, { key: "document", label: "产品说明" }, { key: "prd", label: "PRD" },
+  { key: "decision", label: "关键决策" }, { key: "document", label: "产品说明" },
 ];
 ---
 <article class="portfolio-overview" data-pagefind-body>
@@ -33,12 +32,13 @@ const filters = [
     <h1 class="serif">HomeAgent <span>/</span> ReTask</h1>
     <div class="opening-story"><div class="story-lead">
     <p class="hero-question">一台能操作实物的机器人，<br class="mobile-break" />应该先为谁创造价值？</p>
-    <p class="hero-description">智能家居已经能控制联网设备，但对没有联网接口、位置会变化的实体物品，仍缺少灵活的执行端。HomeAgent 从这一缺口出发，探索让家庭成员能够远程委托真实的物理事务。</p>
+    <p class="hero-description">智能家居已经能控制联网设备，但对没有联网接口、位置会变化的实体物品，仍缺少灵活的执行端。HomeAgent 从这一缺口出发，探索让家庭成员在休息或忙于其他事情时，也能委托室内取送。</p>
     <dl class="problem-details">
-      <div><dt>为谁解决</dt><dd>优先研究经常同时外出、已有智能家电的繁忙家庭：哪些事务必须有人在场，又无法被专用设备或服务经济地覆盖？</dd></div>
-      <div><dt>从什么任务切入</dt><dd>在授权的单层家庭内，从预设位置取送已知轻小物品，交给有明确需求的已授权成员，并反馈结果。接收者与后续用途，是任务成立的前提。</dd></div>
+      <div><dt>为谁解决</dt><dd>从正在休息或专注其他事务的家庭成员出发：一次短距离取物会中断当前状态，能否由机器人代为完成？自己起身、请家人帮忙或提前准备，仍是需要比较的办法。</dd></div>
+      <div><dt>从什么任务切入</dt><dd>用户在卧室床上休息，希望取来客厅预设位置的一本书。选择物品与床边指定交付区后，机器人模拟取书和运送，送达后由用户确认收到。</dd></div>
       <div><dt>怎样判断值得做</dt><dd>比较实际发生频率、现有替代方案、用户已承担的成本，以及失败后的接管负担；同时检验家庭成员能否接受权限、影像与操作边界。</dd></div>
     </dl>
+    <a class="project-documents-link" href="#products">查看项目文档 <span aria-hidden="true">↓</span></a>
     </div>
   <section class="story-section" aria-labelledby="decisions-heading"><span id="decisions" class="section-anchor" aria-hidden="true"></span>
     <div class="section-heading"><span>02</span><h2 id="decisions-heading">从家庭愿景，走向可界定的仓储任务</h2></div>
@@ -52,18 +52,18 @@ const filters = [
   </header>
 
   <section class="works-section" aria-labelledby="works-heading"><span id="products" class="section-anchor" aria-hidden="true"></span>
-    <div class="section-heading"><span>03</span><h2 id="works-heading">项目作品</h2></div>
+    <div class="section-heading"><span>03</span><h2 id="works-heading">研究与设计成果</h2></div>
     <p class="works-intro">从两款产品的形态与交互，进一步了解方向取舍、系统边界与具体功能。</p>
     <project-work-gallery>
       <div class="work-tools" data-work-tools hidden data-pagefind-ignore>
-        <div class="tool-topline"><div class="work-filters" role="group" aria-label="按作品类型筛选">{filters.map((filter) => <button type="button" data-work-filter={filter.key} aria-pressed={filter.key === "all"}>{filter.label}</button>)}</div><output class="work-count" aria-live="polite" aria-atomic="true" data-work-count>{works.length} 项作品</output></div>
+        <div class="tool-topline"><div class="work-filters" role="group" aria-label="按成果类型筛选">{filters.map((filter) => <button type="button" data-work-filter={filter.key} aria-pressed={filter.key === "all"}>{filter.label}</button>)}</div><output class="work-count" aria-live="polite" aria-atomic="true" data-work-count>{works.length} 份研究与设计成果</output></div>
       </div>
       <div class="work-grid" id="project-work-grid">{works.map((work) => <article class="work-card" data-work-kind={work.kind}>
-        <a href={work.href} aria-label={`${work.fullTitle}，${work.kindName}${work.kind === "prd" ? "，内容待完善" : ""}`}>
+        <a href={work.href} aria-label={`${work.fullTitle}，${work.kindName}`}>
           <div class="work-preview" aria-hidden="true">
-            {work.preview === "homeagent" || work.preview === "retask" ? <RobotForm product={work.preview} compact /> : work.preview === "decision" ? <div class="decision-preview">{["家庭通用执行", "可度量的企业任务", "多客户 3PL 仓储", "受限任务与工位复用"].map((step, index) => <div><span>0{index + 1}</span><strong>{step}</strong></div>)}</div> : work.preview === "prd" ? <div class="reconfiguration-preview"><div><span>工位 A</span><strong>任务 A</strong></div><span class="switch-arrow">⇄</span><div><span>工位 B</span><strong>任务 B</strong></div><p>任务切换 · 技能复用 · 重新配置</p></div> : <div class="definition-preview"><strong class="serif">{work.product ?? "产品定义"}</strong><p>{work.product === "HomeAgent" ? "家庭需求 / 受限取送 / 权限边界" : work.product === "ReTask" ? "3PL 任务 / 工位复用 / 配置经济性" : "产品场景 / 系统边界 / 验证路径"}</p><span>场景 → 任务 → 系统</span></div>}
+            {work.preview === "homeagent" || work.preview === "retask" ? <RobotForm product={work.preview} compact /> : work.preview === "decision" ? <div class="decision-preview">{["家庭通用执行", "可度量的企业任务", "多客户 3PL 仓储", "受限任务与工位复用"].map((step, index) => <div><span>0{index + 1}</span><strong>{step}</strong></div>)}</div> : <div class="definition-preview"><strong class="serif">{work.product ?? "产品定义"}</strong><p>{work.product === "HomeAgent" ? "家庭需求 / 受限取送 / 权限边界" : work.product === "ReTask" ? "3PL 任务 / 工位复用 / 配置经济性" : "产品场景 / 系统边界 / 验证路径"}</p><span>场景 → 任务 → 系统</span></div>}
           </div>
-          <div class="card-copy"><div class="card-meta"><span>{work.kindName}</span>{work.kind === "design" && <span>概念方案</span>}{work.kind === "prd" && <span>内容待完善</span>}</div><h3>{work.title}</h3><p>{work.description}</p><span class="card-action"><span>{work.kind === "design" ? "查看产品设计" : work.kind === "decision" ? "阅读关键决策" : work.kind === "prd" ? "查看功能 PRD" : "阅读产品说明"}</span><span class="card-arrow" aria-hidden="true">↗</span></span></div>
+          <div class="card-copy"><div class="card-meta"><span>{work.kindName}</span>{work.kind === "design" && <span>概念方案</span>}</div><h3>{work.title}</h3><p>{work.description}</p><span class="card-action"><span>{work.kind === "design" ? "查看产品设计" : work.kind === "decision" ? "阅读关键决策" : "阅读产品说明"}</span><span class="card-arrow" aria-hidden="true">↗</span></span></div>
         </a>
       </article>)}</div>
       <div class="empty-state" data-work-empty hidden><h3>该类型暂无作品</h3><button type="button" data-work-reset>查看全部作品</button></div>
@@ -94,7 +94,6 @@ const filters = [
   .work-preview { display: flex; align-items: center; justify-content: center; height: 10rem; flex: 0 0 10rem; padding: .75rem; background: var(--btn-regular-bg); border-bottom: 1px solid var(--line-color); }
   .work-preview :global(.robot-form) { width: 15rem; max-width: 100%; --robot-accent: var(--primary); }
   .decision-preview { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem 1rem; width: 100%; max-width: 20rem; } .decision-preview > div { border-left: 1px solid var(--line-color); padding-left: .75rem; } .decision-preview span { display: block; color: var(--primary); font-size: .6875rem; margin-bottom: .25rem; } .decision-preview strong { font-size: .75rem; line-height: 1.6; font-weight: 500; }
-  .reconfiguration-preview { display: grid; grid-template-columns: 1fr auto 1fr; gap: .75rem; align-items: center; width: 100%; max-width: 19rem; } .reconfiguration-preview > div { background: var(--card-bg); border: 1px solid var(--line-color); border-radius: .35rem; padding: .75rem; } .reconfiguration-preview > div > span { display: block; color: var(--btn-content); font-size: .75rem; margin-bottom: .375rem; } .reconfiguration-preview strong { font-size: .875rem; font-weight: 500; } .switch-arrow { color: var(--primary); font-size: 1.375rem; } .reconfiguration-preview > p { grid-column: 1 / -1; font-size: .75rem; line-height: 1.8; text-align: center; color: var(--btn-content); }
   .definition-preview { width: 100%; max-width: 20rem; padding: .5rem .75rem; } .definition-preview > strong { display: block; font-size: 1.75rem; font-weight: 400; line-height: 1.2; } .definition-preview > p { margin-top: .75rem; color: var(--btn-content); font-size: .75rem; line-height: 1.8; } .definition-preview > span { display: block; font-size: .75rem; color: var(--primary); margin-top: .75rem; }
   .card-copy { display: flex; flex-direction: column; flex: 1; padding: 1.25rem; } .card-meta { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: space-between; color: var(--btn-content); font-size: .75rem; line-height: 1.5; } .card-meta > span:last-child:not(:first-child) { color: var(--primary); }
   .card-copy h3 { font-size: 1.125rem; font-weight: 600; line-height: 1.5; letter-spacing: -.025em; margin-top: .75rem; } .card-copy > p { color: var(--btn-content); font-size: .875rem; line-height: 1.75; margin-top: .625rem; } .card-action { display: flex; align-items: center; justify-content: space-between; gap: 1rem; color: var(--primary); font-size: .8125rem; line-height: 1.6; padding-top: 1.25rem; margin-top: auto; } .card-arrow { transition: transform 160ms ease; }
@@ -107,6 +106,7 @@ const filters = [
   .problem-details { display: grid; gap: 1.25rem; margin-top: 1.75rem; }
   .problem-details dt { font-size: .875rem; font-weight: 600; line-height: 1.6; }
   .problem-details dd { font-size: .875rem; line-height: 1.85; color: var(--btn-content); margin-top: .375rem; }
+  .project-documents-link { display: inline-flex; gap: 1rem; align-items: center; min-height: 2.75rem; color: var(--primary); font-size: .8125rem; margin-top: 1.5rem; } .project-documents-link:hover { text-decoration: underline; }
   .story-section { margin-top: 0; border-left: 1px solid var(--line-color); padding-left: 2rem; }
   .story-section h2 { font-size: 1.375rem; text-wrap: balance; }
   .story-section .direction-label { font-size: .8125rem; }
@@ -160,7 +160,7 @@ const filters = [
         button.setAttribute("aria-pressed", String(button.dataset.workFilter === this.activeFilter));
       });
       const count = this.querySelector<HTMLOutputElement>("[data-work-count]");
-      if (count) count.textContent = visibleCount === cards.length ? `${cards.length} 项作品` : `${visibleCount} / ${cards.length} 项作品`;
+      if (count) count.textContent = visibleCount === cards.length ? `${cards.length} 份研究与设计成果` : `${visibleCount} / ${cards.length} 份成果`;
       const empty = this.querySelector<HTMLElement>("[data-work-empty]");
       if (empty) empty.hidden = visibleCount !== 0;
     }
