@@ -10,6 +10,7 @@ import "../styles/mermaid.css";
 import ConfigCarrier from "@components/ConfigCarrier.astro";
 import GlobalStyles from "@components/GlobalStyles.astro";
 import PrivateAnalytics from "@components/PrivateAnalytics.astro";
+import Analytics from "@vercel/analytics/astro";
 import { profileConfig, siteConfig } from "@/config";
 import {
 	AUTO_MODE,
@@ -83,6 +84,7 @@ const bannerOffset =
 	  data-overlayscrollbars-initialize
 >
 	<head>
+		<Analytics />
 
 		<title>{pageTitle}</title>
 
