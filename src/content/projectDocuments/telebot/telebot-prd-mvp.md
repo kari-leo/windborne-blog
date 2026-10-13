@@ -1,5 +1,6 @@
 ---
 title: "TeleBot 初始 PRD（最小 MVP）"
+navTitle: "初始 PRD"
 description: "产品起步时的需求文档，定义最小 MVP 的范围与验证闭环。"
 project: "telebot"
 order: 2

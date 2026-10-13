@@ -2,6 +2,7 @@
 import PortfolioOverview from "@components/homeagent/PortfolioOverview.astro";
 import Markdown from "@components/misc/Markdown.astro";
 import ProjectMobileNav from "@components/ProjectMobileNav.astro";
+import TelebotOverview from "@components/telebot/PortfolioOverview.astro";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { getProjectDocuments, getSortedProjects } from "@utils/content-utils";
 import { getProjectDocumentUrl } from "@utils/url-utils";
@@ -19,12 +20,13 @@ const documents = await getProjectDocuments(entry.slug);
 const { Content } = await entry.render();
 const documentSlug = (document: (typeof documents)[number]) =>
 	document.slug.split("/").at(-1) ?? document.slug;
+const hasOverview = ["homeagent", "telebot"].includes(entry.slug);
 ---
 
 <MainGridLayout title={`${entry.data.title} · 作品集`} description={entry.data.description} projectNavigation={{ project: entry, documents }}>
-	<div class="min-w-0 pb-16 pt-12" data-pagefind-ignore={entry.slug !== "homeagent" ? true : undefined}>
+	<div class="min-w-0 pb-16 pt-12" data-pagefind-ignore={!hasOverview ? true : undefined}>
 		<ProjectMobileNav project={entry} documents={documents} />
-		{entry.slug === "homeagent" ? <PortfolioOverview documents={documents} /> : <div data-pagefind-body>
+		{entry.slug === "homeagent" ? <PortfolioOverview documents={documents} /> : entry.slug === "telebot" ? <TelebotOverview documents={documents} /> : <div data-pagefind-body>
 			<div class="mb-9 border-b border-[var(--line-color)] pb-8">
 				<p class="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--btn-content)]">{entry.data.status} / 项目概览</p>
 				<h1 class="serif mb-5 text-[clamp(2.5rem,5vw,4rem)] leading-none text-[var(--deep-text)]">{entry.data.title}</h1>

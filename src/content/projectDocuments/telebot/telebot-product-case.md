@@ -1,5 +1,6 @@
 ---
 title: "TeleBot 产品说明（当前状态）"
+navTitle: "产品说明"
 description: "产品当前状态下的说明，介绍主要功能、产品演进与实际使用案例。"
 project: "telebot"
 order: 1

@@ -1,0 +1,136 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getProjectDocumentUrl } from "@utils/url-utils";
+import { documentDetails } from "./content";
+import TaskCases from "./TaskCases.astro";
+
+interface Props {
+	documents: CollectionEntry<"projectDocuments">[];
+}
+const { documents } = Astro.props;
+const works = documents
+	.map((entry) => {
+		const slug = entry.slug.split("/").at(-1) ?? entry.slug;
+		const detail = documentDetails[slug as keyof typeof documentDetails] ?? {
+			kind: "项目文档",
+			title: entry.data.title,
+			description: entry.data.description,
+			preview: "product",
+			action: "阅读项目文档",
+			order: entry.data.order,
+		};
+		return { ...detail, href: getProjectDocumentUrl("telebot", slug) };
+	})
+	.sort((a, b) => a.order - b.order);
+---
+
+<article class="telebot-overview" data-pagefind-body>
+  <header id="problem" class="project-hero">
+    <p class="eyebrow"><span>01</span> 问题起点 · 跨设备任务委托</p>
+    <h1 class="serif">TeleBot<span>.</span></h1>
+    <div class="opening-story">
+      <div class="story-copy">
+        <p class="hero-question">离开电脑后，<br />怎样让任务继续推进？</p>
+        <p class="hero-description">通过飞书连接手机与个人电脑，将取文件、整理内容与定时任务交给本机 Agent，结果回到原会话。</p>
+        <dl class="problem-details"><div><dt>从一个真实需求开始</dt><dd>临时需要面试资料，只记得大致目录，文件却留在电脑里。</dd></div><div><dt>让结果直接交付</dt><dd>找到文件、写入博客、更新岗位文档，让任务在已有工作流中完成。</dd></div></dl>
+        <a class="text-link" href="#demo">查看任务演示<span aria-hidden="true">↓</span></a>
+      </div>
+      <figure class="product-visual" aria-label="飞书发起任务，本机 Agent 执行，结果返回原会话">
+        <div class="phone">
+          <div class="phone-heading"><span class="status-dot" aria-hidden="true"></span><span>飞书 · TeleBot</span></div>
+          <div class="phone-chat"><p class="chat-user">帮我找到面试资料里的简历，发到这里。</p><p class="chat-reply">已找到目标文件。</p><div class="file-result"><span class="file-mark" aria-hidden="true">PDF</span><div>简历.pdf<small>文件已发送到当前会话</small></div></div></div>
+          <div class="phone-input" aria-hidden="true">发送消息<span>＋</span></div>
+        </div>
+        <div class="agent"><div class="agent-heading">本机 Agent<span class="status-dot" aria-hidden="true"></span></div><p class="agent-task">任务<strong>查找并发送文件</strong></p><ul><li>查找允许目录</li><li>确认目标文件</li><li>返回原会话</li></ul><p class="agent-result">任务已完成 ↗</p></div>
+        <figcaption>手机委托 → 本机执行 → 结果交付</figcaption>
+      </figure>
+    </div>
+  </header>
+
+  <section class="project-section" id="demo" aria-labelledby="telebot-demo-heading">
+    <div class="section-heading"><span>02</span><h2 id="telebot-demo-heading">从一句话，到一个完成的任务</h2></div>
+    <TaskCases />
+  </section>
+
+  <section class="project-section" id="evolution" aria-labelledby="telebot-evolution-heading">
+    <div class="section-heading"><span>03</span><h2 id="telebot-evolution-heading">每一次扩展，都来自一个具体问题</h2></div>
+    <ol class="timeline"><li><p>远程取文件</p><h3>资料留在电脑里</h3><div>查找、读取与文件交付</div></li><li><p>内容交付</p><h3>结果需要进入工作流</h3><div>整理、落盘与确认发布</div></li><li><p>长期委托</p><h3>重复任务需要持续推进</h3><div>知识上下文与定时执行</div></li></ol>
+  </section>
+
+  <section class="project-section" id="documents" aria-labelledby="telebot-documents-heading">
+    <div class="section-heading"><span>04</span><h2 id="telebot-documents-heading">研究与设计成果</h2></div>
+    <div class="document-grid">{works.map((work) => <article class="document-card">
+      <a href={work.href}>
+        <div class:list={["document-preview", `preview-${work.preview}`]} aria-hidden="true">
+          {work.preview === "mvp" ? <><span>发现问题</span><span>↘</span><span>最小闭环</span></> : work.preview === "schedule" ? <><span>每天凌晨</span><strong>更新秋招岗位</strong><span>文档更新 → 变更表返回</span></> : <><strong class="serif">TeleBot</strong><span>场景 → 任务 → 交付</span></>}
+        </div>
+        <div class="document-copy"><p class="document-kind">{work.kind}</p><h3>{work.title}</h3><p class="document-description">{work.description}</p><span class="document-action">{work.action}<span aria-hidden="true">↗</span></span></div>
+      </a>
+    </article>)}</div>
+  </section>
+</article>
+
+<style>
+  .telebot-overview { color: var(--deep-text); container-type: inline-size; container-name: telebot-overview; }
+  .project-hero, .project-section { scroll-margin-top: 5.5rem; }
+  .project-hero { padding-top: .5rem; }
+  .eyebrow { color: var(--btn-content); font-size: .75rem; line-height: 1.5; }
+  .eyebrow > span { color: var(--primary); margin-right: .625rem; font-variant-numeric: tabular-nums; }
+  h1 { font-size: clamp(3.25rem, 6vw, 4.5rem); font-weight: 400; line-height: 1.1; letter-spacing: -.03em; margin: 1rem 0 1.75rem; }
+  h1 > span { color: var(--primary); }
+  .opening-story { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; align-items: center; }
+  .story-copy { min-width: 0; }
+  .hero-question { font-size: clamp(1.375rem, 2.3vw, 1.625rem); font-weight: 600; line-height: 1.6; letter-spacing: -.025em; }
+  .hero-description { color: var(--btn-content); font-size: .9375rem; line-height: 1.85; margin-top: 1rem; }
+  .problem-details { display: grid; gap: 1rem; margin-top: 1.5rem; font-size: .875rem; line-height: 1.8; }
+  dt { font-weight: 600; margin-bottom: .25rem; } dd { color: var(--btn-content); }
+  .text-link { display: inline-flex; align-items: center; gap: 1rem; min-height: 2.75rem; color: var(--primary); font-size: .8125rem; margin-top: 1.25rem; }
+  .text-link:hover { text-decoration: underline; }
+  .product-visual { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 1rem; align-items: center; padding-block: 1rem; }
+  .phone, .agent { min-width: 0; background: var(--card-bg); border: 1px solid var(--line-color); border-radius: .75rem; box-shadow: 0 .5rem 1.5rem color-mix(in srgb, var(--deep-text) 5%, transparent); }
+  .phone { overflow: hidden; }
+  .phone-heading { display: flex; gap: .5rem; align-items: center; padding: .875rem .75rem; border-bottom: 1px solid var(--line-color); font-size: .75rem; }
+  .status-dot { display: inline-block; flex: 0 0 .375rem; width: .375rem; height: .375rem; border-radius: 50%; background: var(--primary); }
+  .phone-chat { display: grid; gap: .75rem; padding: 1.25rem .75rem; font-size: .75rem; line-height: 1.75; }
+  .chat-user, .chat-reply { padding: .625rem; border-radius: .375rem; }
+  .chat-user { justify-self: end; background: var(--btn-regular-bg); max-width: 95%; }
+  .chat-reply { justify-self: start; background: var(--btn-plain-bg-hover); }
+  .file-result { display: flex; gap: .5rem; align-items: center; border: 1px solid var(--line-color); border-radius: .375rem; padding: .625rem; overflow-wrap: anywhere; }
+  .file-mark { flex-shrink: 0; white-space: nowrap; color: var(--primary); background: var(--btn-regular-bg); padding: .25rem; font-size: .6875rem; }
+  .file-result small { display: block; font-size: .6875rem; color: var(--btn-content); margin-top: .25rem; }
+  .phone-input { display: flex; justify-content: space-between; padding: .75rem; border-top: 1px solid var(--line-color); color: var(--btn-content); font-size: .6875rem; }
+  .agent { padding: .875rem; font-size: .75rem; }
+  .agent-heading { display: flex; align-items: center; justify-content: space-between; gap: .5rem; padding-bottom: .625rem; border-bottom: 1px solid var(--line-color); }
+  .agent-task { color: var(--btn-content); margin-top: .75rem; font-size: .6875rem; } .agent-task strong { display: block; font-weight: 500; color: var(--deep-text); font-size: .75rem; margin-top: .25rem; }
+  .agent ul { display: grid; gap: .375rem; margin-top: .75rem; color: var(--btn-content); font-size: .6875rem; } .agent li::before { content: "✓"; color: var(--primary); margin-right: .375rem; }
+  .agent-result { color: var(--primary); margin-top: .875rem; border-top: 1px solid var(--line-color); padding-top: .625rem; font-size: .6875rem; }
+  figcaption { grid-column: 1 / -1; text-align: center; color: var(--btn-content); font-size: .75rem; }
+  .project-section { margin-top: 2.75rem; padding-top: 1.75rem; border-top: 1px solid var(--line-color); }
+  .section-heading { display: flex; gap: .75rem; align-items: baseline; } .section-heading > span { color: var(--primary); font-size: .75rem; font-variant-numeric: tabular-nums; }
+  h2 { font-size: clamp(1.25rem, 2.4vw, 1.625rem); line-height: 1.5; }
+  .timeline { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 1.75rem; }
+  .timeline li { position: relative; border-top: 1px solid var(--line-color); padding: 1.25rem 1rem 0 0; }
+  .timeline li::before { content: ""; position: absolute; width: .4375rem; height: .4375rem; top: -.25rem; left: 0; border-radius: 50%; background: var(--primary); }
+  .timeline p { font-size: .75rem; color: var(--primary); } .timeline h3 { font-size: .9375rem; font-weight: 500; line-height: 1.6; margin-block: .375rem; } .timeline li > div { color: var(--btn-content); font-size: .8125rem; line-height: 1.75; }
+  .document-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .document-card { min-width: 0; }
+  .document-card > a { display: flex; flex-direction: column; height: 100%; overflow: hidden; border: 1px solid var(--line-color); border-radius: .75rem; background: var(--card-bg); transition: border-color 160ms ease, transform 160ms ease; }
+  .document-preview { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: .5rem; height: 8rem; flex: 0 0 8rem; padding: .75rem; background: var(--btn-regular-bg); border-bottom: 1px solid var(--line-color); color: var(--btn-content); font-size: .6875rem; text-align: center; }
+  .preview-product strong { color: var(--deep-text); font-size: 2rem; font-weight: 400; line-height: 1.2; }
+  .preview-mvp { flex-direction: row; color: var(--primary); gap: .5rem; }
+  .preview-schedule strong { color: var(--deep-text); font-size: 1rem; font-weight: 500; }
+  .document-copy { display: flex; flex-direction: column; flex: 1; padding: 1rem; }
+  .document-kind { font-size: .75rem; color: var(--btn-content); }
+  .document-copy h3 { font-size: 1rem; line-height: 1.6; margin-block: .5rem; }
+  .document-description { font-size: .8125rem; line-height: 1.8; color: var(--btn-content); }
+  .document-action { display: flex; justify-content: space-between; gap: .5rem; margin-top: auto; padding-top: 1.25rem; color: var(--primary); font-size: .75rem; }
+  a:focus-visible { outline: 2px solid var(--primary); outline-offset: 4px; }
+  @media (hover: hover) { .document-card > a:hover { border-color: var(--primary); transform: translateY(-2px); } }
+  @container telebot-overview (max-width: 40rem) { .opening-story { grid-template-columns: 1fr; gap: 1.5rem; } .product-visual { width: 100%; max-width: 25rem; justify-self: center; } }
+  @container telebot-overview (max-width: 34rem) {
+    .timeline { grid-template-columns: 1fr; gap: 1.5rem; } .timeline li { border-top: 0; border-left: 1px solid var(--line-color); padding: 0 0 0 1.25rem; } .timeline li::before { top: .375rem; left: -.25rem; }
+    .document-grid { grid-template-columns: 1fr; gap: 1rem; } .document-card > a { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.4fr); } .document-preview { height: auto; border-bottom: 0; border-right: 1px solid var(--line-color); } .preview-mvp { flex-direction: column; }
+    .document-copy { padding: .875rem; } .project-section { margin-top: 2rem; } .product-visual { gap: .625rem; } .agent { padding: .625rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { .document-card > a { transition: none; } .document-card > a:hover { transform: none; } }
+</style>

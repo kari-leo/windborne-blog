@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { overviewSections } from "@components/telebot/content";
 import {
 	getProjectDocumentUrl,
 	getProjectUrlBySlug,
@@ -27,6 +28,7 @@ const documentSlug = (entry: CollectionEntry<"projectDocuments">) =>
 		<a href={getProjectUrlBySlug(project.slug)} class:list={["document-link", !activeSlug && "active"]} aria-current={!activeSlug ? "page" : undefined}>
 			<span class="document-marker"></span>项目概览
 		</a>
+		{project.slug === "telebot" && !activeSlug && overviewSections.map((section) => <a href={`#${section.id}`} class="document-link section-link"><span class="document-marker"></span>{section.title}</a>)}
 		{documents.map((entry, index) => (
 			<a href={getProjectDocumentUrl(project.slug, documentSlug(entry))} class:list={["document-link", activeSlug === documentSlug(entry) && "active"]} aria-current={activeSlug === documentSlug(entry) ? "page" : undefined}>
 				<span class="document-marker"></span>{project.slug !== "homeagent" && <span class="document-index">{String(index + 1).padStart(2, "0")}</span>}{entry.data.navTitle ?? entry.data.title}
@@ -46,6 +48,7 @@ const documentSlug = (entry: CollectionEntry<"projectDocuments">) =>
 	.document-link { display: flex; align-items: baseline; gap: .65rem; padding: .65rem .35rem; border-radius: .35rem; color: var(--btn-content); font-size: .84rem; line-height: 1.5; transition: color .2s, background .2s; }
 	.document-link:hover { color: var(--deep-text); background: var(--btn-plain-bg-hover); }
 	.document-link.active { color: var(--primary); font-weight: 600; }
+	.section-link + .document-link:not(.section-link) { margin-top: .5rem; border-top: 1px solid var(--line-color); padding-top: 1rem; }
 	.document-marker { align-self: center; display: block; width: 3px; height: 3px; flex: 0 0 3px; border-radius: 50%; background: currentColor; opacity: .45; }
 	.document-link.active .document-marker { opacity: 1; }
 	.document-index { color: var(--btn-content); font-size: .7rem; font-weight: 400; font-variant-numeric: tabular-nums; }
