@@ -1,0 +1,29 @@
+---
+import MainGridLayout from "../layouts/MainGridLayout.astro";
+import { url } from "../utils/url-utils";
+---
+
+<MainGridLayout title="设备统计白名单" lang="zh-CN">
+    <meta slot="head" name="robots" content="noindex, nofollow" />
+    <section class="pt-20 pb-12 max-w-3xl stagger" data-pagefind-ignore>
+        <h1 class="serif text-4xl text-[var(--deep-text)] mb-8">设备统计白名单</h1>
+        <div class="soft-divider mb-8"></div>
+        <p class="mb-6 text-[var(--deep-text)]" role="status" data-analytics-device-status>
+            正在检查这个浏览器的登记状态……
+        </p>
+        <p class="mb-4 text-[var(--btn-content)] leading-relaxed">
+            白名单按浏览器生效。登记后，切换 Wi-Fi 或移动网络仍会排除你的访问。
+            更换浏览器、使用无痕模式或清除网站数据后，需要重新打开登记链接。
+        </p>
+        <p class="mb-8 text-[var(--btn-content)] leading-relaxed">
+            此页面不计入统计。访客数据仅在 Vercel 后台查看。
+        </p>
+        <div class="flex flex-wrap gap-6 text-sm">
+            <a href={url("/")} class="text-[var(--primary)]">返回博客</a>
+            <button type="button" class="text-[var(--btn-content)] hover:text-[var(--primary)]" data-analytics-device-remove>
+                移除此浏览器的登记
+            </button>
+        </div>
+        <noscript><p class="mt-6">请启用 JavaScript，以保存浏览器登记。</p></noscript>
+    </section>
+</MainGridLayout>

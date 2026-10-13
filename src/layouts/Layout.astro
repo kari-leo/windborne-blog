@@ -9,6 +9,7 @@ import "../styles/mermaid.css";
 
 import ConfigCarrier from "@components/ConfigCarrier.astro";
 import GlobalStyles from "@components/GlobalStyles.astro";
+import PrivateAnalytics from "@components/PrivateAnalytics.astro";
 import { profileConfig, siteConfig } from "@/config";
 import {
 	AUTO_MODE,
@@ -159,6 +160,7 @@ const bannerOffset =
 		<ConfigCarrier></ConfigCarrier>
 		<GlobalStyles></GlobalStyles>
 		<slot />
+		<PrivateAnalytics />
 
 		<!-- increase the page height during page transition to prevent the scrolling animation from jumping -->
 		<div id="page-height-extend" class="hidden h-[300vh]"></div>
