@@ -1,24 +1,28 @@
 ---
-import { Icon } from "astro-icon/components";
 import type { CollectionEntry } from "astro:content";
-import ProjectDocumentsNav from "./ProjectDocumentsNav.astro";
+import { Icon } from "astro-icon/components";
 import { navBarConfig, profileConfig, siteConfig } from "../config";
 import { LinkPresets } from "../constants/link-presets";
 import { LinkPreset, type NavBarLink } from "../types/config";
-import { getCategoryList, getSortedPostsList, getTagList } from "../utils/content-utils";
+import {
+	getCategoryList,
+	getSortedPostsList,
+	getTagList,
+} from "../utils/content-utils";
 import { getPostUrlBySlug, getTagUrl, url } from "../utils/url-utils";
+import ProjectDocumentsNav from "./ProjectDocumentsNav.astro";
 
 const links: NavBarLink[] = navBarConfig.links.map(
-  (item: NavBarLink | LinkPreset): NavBarLink =>
-    typeof item === "number" ? LinkPresets[item] : item,
+	(item: NavBarLink | LinkPreset): NavBarLink =>
+		typeof item === "number" ? LinkPresets[item] : item,
 );
 
 interface Props {
-  projectNavigation?: {
-    project: CollectionEntry<"projects">;
-    documents: CollectionEntry<"projectDocuments">[];
-    activeSlug?: string;
-  };
+	projectNavigation?: {
+		project: CollectionEntry<"projects">;
+		documents: CollectionEntry<"projectDocuments">[];
+		activeSlug?: string;
+	};
 }
 
 const { projectNavigation } = Astro.props;
@@ -27,13 +31,16 @@ const currentPath = Astro.url.pathname;
 const initial = profileConfig.name.charAt(0).toUpperCase();
 
 const [categories, tags, recentPosts] = await Promise.all([
-  getCategoryList(),
-  getTagList(),
-  getSortedPostsList(),
+	getCategoryList(),
+	getTagList(),
+	getSortedPostsList(),
 ]);
 
 const recent = recentPosts.slice(0, 5);
-const topTags = tags.slice().sort((a, b) => b.count - a.count).slice(0, 12);
+const topTags = tags
+	.slice()
+	.sort((a, b) => b.count - a.count)
+	.slice(0, 12);
 ---
 
 <aside id="left-rail" class="hidden lg:block">

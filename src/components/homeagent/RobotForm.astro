@@ -1,10 +1,23 @@
 ---
-interface Props { product: "homeagent" | "retask"; compact?: boolean; }
+interface Props {
+	product: "homeagent" | "retask";
+	compact?: boolean;
+}
 const { product, compact = false } = Astro.props;
 const home = product === "homeagent";
 const modules = home
-  ? ["移动感知：观察授权区域与预设物品", "轻量操作臂：受限轻小物品取放", "小型轮式底盘：家庭单层移动与避障", "独立中控机箱：家庭权限、任务与家居协同"]
-  : ["工业感知：识别受支持的包裹与姿态", "高刚度操作臂与末端：面向包裹负载配置", "承载底盘与加固基座：宽轮距、低重心", "本体控制与安全单元：校准、互锁与急停"];
+	? [
+			"移动感知：观察授权区域与预设物品",
+			"轻量操作臂：受限轻小物品取放",
+			"小型轮式底盘：家庭单层移动与避障",
+			"独立中控机箱：家庭权限、任务与家居协同",
+		]
+	: [
+			"工业感知：识别受支持的包裹与姿态",
+			"高刚度操作臂与末端：面向包裹负载配置",
+			"承载底盘与加固基座：宽轮距、低重心",
+			"本体控制与安全单元：校准、互锁与急停",
+		];
 ---
 <figure class:list={["robot-form", home ? "home" : "warehouse", compact && "compact"]}>
   <svg viewBox="0 0 520 330" role="img" aria-label={home ? "HomeAgent 概念结构：轻量小型家庭机器人，通过本地网络与独立部署的中控机箱协同；中控不在机器人本体内" : "ReTask 工业概念结构：高负载高刚度设计方向，粗壮操作臂、加固安装基座、宽轮距承载底盘与本体安全控制"}>

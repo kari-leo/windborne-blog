@@ -1,7 +1,7 @@
 ---
-import Markdown from "@components/misc/Markdown.astro";
 import DecisionPath from "@components/homeagent/DecisionPath.astro";
 import ProductShowcase from "@components/homeagent/ProductShowcase.astro";
+import Markdown from "@components/misc/Markdown.astro";
 import ProjectMobileNav from "@components/ProjectMobileNav.astro";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { getProjectDocuments, getSortedProjects } from "@utils/content-utils";
@@ -9,20 +9,32 @@ import { getProjectUrlBySlug } from "@utils/url-utils";
 
 export async function getStaticPaths() {
 	const projects = await getSortedProjects();
-	const groups = await Promise.all(projects.map(async (project) => {
-		const documents = await getProjectDocuments(project.slug);
-		return documents.map((document) => ({
-			params: { project: project.slug, document: document.slug.split("/").at(-1) ?? document.slug },
-			props: { project, document, documents },
-		}));
-	}));
+	const groups = await Promise.all(
+		projects.map(async (project) => {
+			const documents = await getProjectDocuments(project.slug);
+			return documents.map((document) => ({
+				params: {
+					project: project.slug,
+					document: document.slug.split("/").at(-1) ?? document.slug,
+				},
+				props: { project, document, documents },
+			}));
+		}),
+	);
 	return groups.flat();
 }
 
 const { project, document, documents } = Astro.props;
 const activeSlug = document.slug.split("/").at(-1) ?? document.slug;
 const { Content, headings } = await document.render();
-const showcaseProduct = project.slug === "homeagent" ? (activeSlug === "homeagent-showcase" ? "homeagent" : activeSlug === "retask-showcase" ? "retask" : undefined) : undefined;
+const showcaseProduct =
+	project.slug === "homeagent"
+		? activeSlug === "homeagent-showcase"
+			? "homeagent"
+			: activeSlug === "retask-showcase"
+				? "retask"
+				: undefined
+		: undefined;
 ---
 
 <MainGridLayout title={`${document.data.title} · ${project.data.title}`} description={document.data.description} headings={headings} projectNavigation={{ project, documents, activeSlug }}>

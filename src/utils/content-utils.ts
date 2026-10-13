@@ -45,10 +45,16 @@ export async function getSortedProjects() {
 }
 
 export async function getProjectDocuments(projectSlug: string) {
-	const documents = await getCollection("projectDocuments", ({ data }) =>
-		data.project === projectSlug && (!import.meta.env.PROD || data.draft !== true),
+	const documents = await getCollection(
+		"projectDocuments",
+		({ data }) =>
+			data.project === projectSlug &&
+			(!import.meta.env.PROD || data.draft !== true),
 	);
-	return documents.sort((a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title));
+	return documents.sort(
+		(a, b) =>
+			a.data.order - b.data.order || a.data.title.localeCompare(b.data.title),
+	);
 }
 
 export type PostForList = {

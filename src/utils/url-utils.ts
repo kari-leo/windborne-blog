@@ -20,7 +20,10 @@ export function getProjectUrlBySlug(slug: string): string {
 	return url(`/portfolio/${slug}/`);
 }
 
-export function getProjectDocumentUrl(projectSlug: string, documentSlug: string): string {
+export function getProjectDocumentUrl(
+	projectSlug: string,
+	documentSlug: string,
+): string {
 	return url(`/portfolio/${projectSlug}/${documentSlug}/`);
 }
 

@@ -1,6 +1,10 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { getProjectDocumentUrl, getProjectUrlBySlug, url } from "@utils/url-utils";
+import {
+	getProjectDocumentUrl,
+	getProjectUrlBySlug,
+	url,
+} from "@utils/url-utils";
 
 interface Props {
 	project: CollectionEntry<"projects">;
@@ -9,7 +13,8 @@ interface Props {
 }
 
 const { project, documents, activeSlug } = Astro.props;
-const documentSlug = (entry: CollectionEntry<"projectDocuments">) => entry.slug.split("/").at(-1) ?? entry.slug;
+const documentSlug = (entry: CollectionEntry<"projectDocuments">) =>
+	entry.slug.split("/").at(-1) ?? entry.slug;
 ---
 
 <aside class="project-nav" aria-label={`${project.data.title} 文档导航`}>

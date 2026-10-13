@@ -2,28 +2,90 @@
 import type { CollectionEntry } from "astro:content";
 import { getProjectDocumentUrl } from "@utils/url-utils";
 import RobotForm from "./RobotForm.astro";
-interface Props { documents: CollectionEntry<"projectDocuments">[]; }
+
+interface Props {
+	documents: CollectionEntry<"projectDocuments">[];
+}
 const { documents } = Astro.props;
 const doc = (slug: string) => getProjectDocumentUrl("homeagent", slug);
 type WorkKind = "design" | "decision" | "document";
 type Preview = "homeagent" | "retask" | "decision" | "document";
-interface WorkDetails { title: string; description: string; kind: WorkKind; preview: Preview; order: number; product?: string; }
+interface WorkDetails {
+	title: string;
+	description: string;
+	kind: WorkKind;
+	preview: Preview;
+	order: number;
+	product?: string;
+}
 const details: Record<string, WorkDetails> = {
-  "homeagent-showcase": { title: "HomeAgent｜家庭物理执行终端", description: "床上休息时取书的场景、产品形态与可操作交互原型。", kind: "design", preview: "homeagent", order: 10 },
-  "retask-showcase": { title: "ReTask｜仓储移动操作系统", description: "受限包裹操作、两工位切换场景与成功 / 异常交互原型。", kind: "design", preview: "retask", order: 20 },
-  "decision-case-study": { title: "从 HomeAgent 到 ReTask", description: "为什么转向 ToB、选择 3PL，并把通用能力收敛到具体工位？", kind: "decision", preview: "decision", order: 30 },
-  "home-agent": { title: "HomeAgent｜产品说明", description: "家庭需求、候选任务、权限与安全边界，以及商业模式与竞品比较。", kind: "document", preview: "document", product: "HomeAgent", order: 50 },
-  "retask": { title: "ReTask｜产品说明", description: "3PL 客户、包裹操作边界、系统模块与跨工位复用的经济性。", kind: "document", preview: "document", product: "ReTask", order: 60 },
+	"homeagent-showcase": {
+		title: "HomeAgent｜家庭物理执行终端",
+		description: "床上休息时取书的场景、产品形态与可操作交互原型。",
+		kind: "design",
+		preview: "homeagent",
+		order: 10,
+	},
+	"retask-showcase": {
+		title: "ReTask｜仓储移动操作系统",
+		description: "受限包裹操作、两工位切换场景与成功 / 异常交互原型。",
+		kind: "design",
+		preview: "retask",
+		order: 20,
+	},
+	"decision-case-study": {
+		title: "从 HomeAgent 到 ReTask",
+		description: "为什么转向 ToB、选择 3PL，并把通用能力收敛到具体工位？",
+		kind: "decision",
+		preview: "decision",
+		order: 30,
+	},
+	"home-agent": {
+		title: "HomeAgent｜产品说明",
+		description: "家庭需求、候选任务、权限与安全边界，以及商业模式与竞品比较。",
+		kind: "document",
+		preview: "document",
+		product: "HomeAgent",
+		order: 50,
+	},
+	retask: {
+		title: "ReTask｜产品说明",
+		description: "3PL 客户、包裹操作边界、系统模块与跨工位复用的经济性。",
+		kind: "document",
+		preview: "document",
+		product: "ReTask",
+		order: 60,
+	},
 };
-const kindNames: Record<WorkKind, string> = { design: "产品设计", decision: "关键决策", document: "产品说明" };
-const works = documents.map((entry) => {
-  const slug = entry.slug.split("/").at(-1) ?? entry.slug;
-  const detail = details[slug] ?? { title: entry.data.title, description: entry.data.description, kind: "document" as const, preview: "document" as const, order: 100 + entry.data.order };
-  return { ...detail, slug, fullTitle: entry.data.title, href: doc(slug), kindName: kindNames[detail.kind] };
-}).sort((a, b) => a.order - b.order);
+const kindNames: Record<WorkKind, string> = {
+	design: "产品设计",
+	decision: "关键决策",
+	document: "产品说明",
+};
+const works = documents
+	.map((entry) => {
+		const slug = entry.slug.split("/").at(-1) ?? entry.slug;
+		const detail = details[slug] ?? {
+			title: entry.data.title,
+			description: entry.data.description,
+			kind: "document" as const,
+			preview: "document" as const,
+			order: 100 + entry.data.order,
+		};
+		return {
+			...detail,
+			slug,
+			fullTitle: entry.data.title,
+			href: doc(slug),
+			kindName: kindNames[detail.kind],
+		};
+	})
+	.sort((a, b) => a.order - b.order);
 const filters = [
-  { key: "all", label: "全部" }, { key: "design", label: "产品设计" },
-  { key: "decision", label: "关键决策" }, { key: "document", label: "产品说明" },
+	{ key: "all", label: "全部" },
+	{ key: "design", label: "产品设计" },
+	{ key: "decision", label: "关键决策" },
+	{ key: "document", label: "产品说明" },
 ];
 ---
 <article class="portfolio-overview" data-pagefind-body>

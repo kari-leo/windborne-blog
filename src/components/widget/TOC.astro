@@ -13,7 +13,9 @@ let { headings = [] } = Astro.props;
 // Project documents have a document title at h1. Start their outline at h2
 // so the right rail shows sections and subsections, like a post outline.
 const isPortfolioRoute = Astro.url.pathname.startsWith(url("/portfolio/"));
-const tocHeadings = isPortfolioRoute ? headings.filter((heading) => heading.depth >= 2) : headings;
+const tocHeadings = isPortfolioRoute
+	? headings.filter((heading) => heading.depth >= 2)
+	: headings;
 
 let minDepth = 10;
 for (const heading of tocHeadings) {

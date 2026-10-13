@@ -13,6 +13,7 @@
     "new-post": "node scripts/new-post.js",
     "format": "biome format --write ./src",
     "lint": "biome check --write ./src",
+    "lint:ci": "biome ci ./src --reporter=github",
     "preinstall": "npx only-allow pnpm"
   },
   "dependencies": {

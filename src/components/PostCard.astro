@@ -16,16 +16,8 @@ interface Props {
 	style: string;
 	index?: number;
 }
-const {
-	entry,
-	title,
-	url,
-	published,
-	tags,
-	category,
-	description,
-	style,
-} = Astro.props;
+const { entry, title, url, published, tags, category, description, style } =
+	Astro.props;
 const className = Astro.props.class;
 
 const { remarkPluginFrontmatter } = await entry.render();

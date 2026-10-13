@@ -1,18 +1,49 @@
 <script lang="ts">
-  import { homeTransition, initialHome, type HomeAction, type HomeFault } from "./prototype-machines";
-  import "../../styles/homeagent-prototype.css";
-  let state = initialHome();
-  let item = "";
-  let destination = "";
-  let scenario: HomeFault = "none";
-  let authorized = false;
-  const stages = ["前往客厅取物点", "识别并取书", "运送至卧室", "到达床边指定交付区"];
-  const labels = { intro: "体验取物流程", create: "创建取书任务", confirm: "确认任务与权限", execute: "取书任务执行中（模拟）", receipt: "书已送达，等待确认", success: "取书任务已完成（模拟）", error: "任务暂停，需要处理", cancelled: "任务已取消（模拟）", manual: "已转为人工处理（模拟）" };
-  $: currentStep = ["intro", "create"].includes(state.phase) ? 0 : state.phase === "confirm" ? 1 : ["execute", "error"].includes(state.phase) ? 2 : 3;
-  function dispatch(action: HomeAction) {
-    state = homeTransition(state, action);
-    if (action.type === "reset") { item = ""; destination = ""; scenario = "none"; authorized = false; }
-  }
+import {
+	type HomeAction,
+	type HomeFault,
+	homeTransition,
+	initialHome,
+} from "./prototype-machines";
+import "../../styles/homeagent-prototype.css";
+let state = initialHome();
+let item = "";
+let destination = "";
+let scenario: HomeFault = "none";
+let authorized = false;
+const stages = [
+	"前往客厅取物点",
+	"识别并取书",
+	"运送至卧室",
+	"到达床边指定交付区",
+];
+const labels = {
+	intro: "体验取物流程",
+	create: "创建取书任务",
+	confirm: "确认任务与权限",
+	execute: "取书任务执行中（模拟）",
+	receipt: "书已送达，等待确认",
+	success: "取书任务已完成（模拟）",
+	error: "任务暂停，需要处理",
+	cancelled: "任务已取消（模拟）",
+	manual: "已转为人工处理（模拟）",
+};
+$: currentStep = ["intro", "create"].includes(state.phase)
+	? 0
+	: state.phase === "confirm"
+		? 1
+		: ["execute", "error"].includes(state.phase)
+			? 2
+			: 3;
+function dispatch(action: HomeAction) {
+	state = homeTransition(state, action);
+	if (action.type === "reset") {
+		item = "";
+		destination = "";
+		scenario = "none";
+		authorized = false;
+	}
+}
 </script>
 
 <div class="interactive-prototype" data-prototype="homeagent">

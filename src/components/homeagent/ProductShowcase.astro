@@ -1,9 +1,12 @@
 ---
 import { getProjectDocumentUrl } from "@utils/url-utils";
-import RobotForm from "./RobotForm.astro";
 import HomePrototype from "./HomePrototype.svelte";
 import ReTaskPrototype from "./ReTaskPrototype.svelte";
-interface Props { product: "homeagent" | "retask"; }
+import RobotForm from "./RobotForm.astro";
+
+interface Props {
+	product: "homeagent" | "retask";
+}
 const { product } = Astro.props;
 const home = product === "homeagent";
 const name = home ? "HomeAgent" : "迁作 ReTask";

@@ -1,23 +1,76 @@
 <script lang="ts">
-  import { warehouseTransition, initialWarehouse, type WarehouseAction, type WarehousePhase } from "./prototype-machines";
-  import "../../styles/homeagent-prototype.css";
-  let state = initialWarehouse();
-  let target = "";
-  let strategy = "";
-  let permitted = false;
-  let available = true;
-  let scenario = "pass";
-  let configConfirmed = false;
-  let corrected = false;
-  let runAuthorized = false;
-  const labels: Record<WarehousePhase, string> = { intro: "体验跨工位切换", "a-running": "工位 A 运行中（模拟）", request: "申请切换至工位 B", checking: "执行前检查", blocked: "切换被阻止", exiting: "安全退出工位 A", migrating: "迁移至工位 B（模拟）", configuring: "加载工位 B 配置", calibrating: "校准与安全检查中", fault: "校准未通过，工位 B 不可启动", "b-ready": "工位 B 已就绪", "b-running": "工位 B 运行中（模拟）", "safe-stop": "设备保持安全停止（模拟）" };
-  const phases: WarehousePhase[] = ["a-running", "request", "checking", "exiting", "migrating", "configuring", "calibrating", "b-ready", "b-running"];
-  const steps = ["A 运行", "请求切换", "前置检查", "安全退出", "迁移至 B", "加载配置", "校准检查", "B 就绪", "B 运行"];
-  $: active = state.phase === "blocked" ? 2 : state.phase === "fault" ? 6 : phases.indexOf(state.phase);
-  function dispatch(action: WarehouseAction) {
-    state = warehouseTransition(state, action);
-    if (action.type === "reset") { target = ""; strategy = ""; permitted = false; available = true; scenario = "pass"; configConfirmed = false; corrected = false; runAuthorized = false; }
-  }
+import {
+	initialWarehouse,
+	type WarehouseAction,
+	type WarehousePhase,
+	warehouseTransition,
+} from "./prototype-machines";
+import "../../styles/homeagent-prototype.css";
+let state = initialWarehouse();
+let target = "";
+let strategy = "";
+let permitted = false;
+let available = true;
+let scenario = "pass";
+let configConfirmed = false;
+let corrected = false;
+let runAuthorized = false;
+const labels: Record<WarehousePhase, string> = {
+	intro: "体验跨工位切换",
+	"a-running": "工位 A 运行中（模拟）",
+	request: "申请切换至工位 B",
+	checking: "执行前检查",
+	blocked: "切换被阻止",
+	exiting: "安全退出工位 A",
+	migrating: "迁移至工位 B（模拟）",
+	configuring: "加载工位 B 配置",
+	calibrating: "校准与安全检查中",
+	fault: "校准未通过，工位 B 不可启动",
+	"b-ready": "工位 B 已就绪",
+	"b-running": "工位 B 运行中（模拟）",
+	"safe-stop": "设备保持安全停止（模拟）",
+};
+const phases: WarehousePhase[] = [
+	"a-running",
+	"request",
+	"checking",
+	"exiting",
+	"migrating",
+	"configuring",
+	"calibrating",
+	"b-ready",
+	"b-running",
+];
+const steps = [
+	"A 运行",
+	"请求切换",
+	"前置检查",
+	"安全退出",
+	"迁移至 B",
+	"加载配置",
+	"校准检查",
+	"B 就绪",
+	"B 运行",
+];
+$: active =
+	state.phase === "blocked"
+		? 2
+		: state.phase === "fault"
+			? 6
+			: phases.indexOf(state.phase);
+function dispatch(action: WarehouseAction) {
+	state = warehouseTransition(state, action);
+	if (action.type === "reset") {
+		target = "";
+		strategy = "";
+		permitted = false;
+		available = true;
+		scenario = "pass";
+		configConfirmed = false;
+		corrected = false;
+		runAuthorized = false;
+	}
+}
 </script>
 
 <div class="interactive-prototype" data-prototype="retask">

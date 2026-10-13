@@ -1,8 +1,9 @@
 ---
 // Vercel preview deployments and local development must not pollute live data.
-const enabled = import.meta.env.PROD
-	&& process.env.VERCEL_ENV !== "preview"
-	&& process.env.VERCEL_ENV !== "development";
+const enabled =
+	import.meta.env.PROD &&
+	process.env.VERCEL_ENV !== "preview" &&
+	process.env.VERCEL_ENV !== "development";
 ---
 
 <div id="private-analytics-config" data-enabled={String(enabled)} hidden></div>
