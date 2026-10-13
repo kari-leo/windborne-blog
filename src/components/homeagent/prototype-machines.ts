@@ -1,14 +1,16 @@
 export type HomePhase =
-	| "intro"
 	| "create"
-	| "confirm"
 	| "execute"
-	| "receipt"
 	| "success"
 	| "error"
-	| "cancelled"
-	| "manual";
+	| "cancelled";
 export type HomeFault = "none" | "missing" | "occupied";
+export const homeStages = [
+	"前往客厅取物点",
+	"识别并取书",
+	"运送至卧室",
+	"放置并验证床边交付",
+];
 export interface HomeState {
 	phase: HomePhase;
 	step: number;
@@ -18,21 +20,16 @@ export interface HomeState {
 	error: string;
 }
 export type HomeAction =
+	| { type: "tick" | "cancel" | "reset" }
 	| {
-			type:
-				| "start"
-				| "advance"
-				| "retry"
-				| "receive"
-				| "cancel"
-				| "manual"
-				| "reset"
-				| "edit";
-	  }
-	| { type: "review"; item: string; destination: string; fault: HomeFault }
-	| { type: "execute"; authorized: boolean };
+			type: "submit";
+			item: string;
+			destination: string;
+			fault: HomeFault;
+			authorized: boolean;
+	  };
 export const initialHome = (): HomeState => ({
-	phase: "intro",
+	phase: "create",
 	step: 0,
 	item: "",
 	destination: "",
@@ -44,53 +41,43 @@ export function homeTransition(
 	action: HomeAction,
 ): HomeState {
 	if (action.type === "reset") return initialHome();
-	if (action.type === "start" && state.phase === "intro")
-		return { ...initialHome(), phase: "create" };
-	if (action.type === "review" && state.phase === "create") {
+	if (action.type === "submit" && state.phase === "create") {
 		if (action.item !== "book" || action.destination !== "bedside")
-			return { ...state, error: "请先选择书籍和卧室床边指定交付区。" };
-		return { ...state, ...action, phase: "confirm", error: "" };
+			return { ...state, error: "请选择已登记书籍与床边指定交付区。" };
+		if (!action.authorized)
+			return { ...state, error: "任务超出授权范围，无法执行。" };
+		return {
+			...state,
+			item: action.item,
+			destination: action.destination,
+			fault: action.fault,
+			phase: "execute",
+			error: "",
+		};
 	}
-	if (action.type === "edit" && state.phase === "confirm")
-		return { ...state, phase: "create", error: "" };
-	if (action.type === "execute" && state.phase === "confirm")
-		return action.authorized
-			? { ...state, phase: "execute", step: 0, error: "" }
-			: { ...state, error: "请确认物品、取物点和床边交付区均在授权范围内。" };
-	if (action.type === "advance" && state.phase === "execute") {
+	if (action.type === "tick" && state.phase === "execute") {
 		if (state.step === 1 && state.fault === "missing")
 			return {
 				...state,
 				phase: "error",
-				error: "书籍不在客厅预设位置，取物已暂停。",
+				error: "未在预设位置找到书籍，系统已停止本次取送并报告异常。",
 			};
 		if (state.step === 3 && state.fault === "occupied")
 			return {
 				...state,
 				phase: "error",
-				error: "床边指定交付区被占用，交付已暂停。",
+				error: "床边交付区被占用，系统已停止放置并报告异常；书籍尚未交付。",
 			};
-		return state.step === 3
-			? { ...state, phase: "receipt" }
+		return state.step === homeStages.length - 1
+			? { ...state, phase: "success" }
 			: { ...state, step: state.step + 1 };
 	}
-	if (action.type === "retry" && state.phase === "error")
-		return { ...state, phase: "execute", fault: "none", error: "" };
-	if (action.type === "receive" && state.phase === "receipt")
-		return { ...state, phase: "success" };
-	if (action.type === "manual" && state.phase === "error")
-		return { ...state, phase: "manual", error: "" };
-	if (
-		action.type === "cancel" &&
-		["create", "confirm", "execute", "receipt", "error"].includes(state.phase)
-	)
+	if (action.type === "cancel" && state.phase === "execute")
 		return { ...state, phase: "cancelled", error: "" };
 	return state;
 }
 
 export type WarehousePhase =
-	| "intro"
-	| "a-running"
 	| "request"
 	| "checking"
 	| "blocked"
@@ -102,6 +89,14 @@ export type WarehousePhase =
 	| "b-ready"
 	| "b-running"
 	| "safe-stop";
+export const warehouseStages = [
+	{ phase: "checking", label: "检查任务权限与工位可用性" },
+	{ phase: "exiting", label: "安全退出工位 A" },
+	{ phase: "migrating", label: "沿授权路线迁移至 B" },
+	{ phase: "configuring", label: "加载已登记的工位配置" },
+	{ phase: "calibrating", label: "自动校准与安全检查" },
+	{ phase: "b-ready", label: "检查通过，自动启动 B" },
+] satisfies { phase: WarehousePhase; label: string }[];
 export interface WarehouseState {
 	phase: WarehousePhase;
 	target: string;
@@ -109,22 +104,12 @@ export interface WarehouseState {
 	permitted: boolean;
 	available: boolean;
 	failCalibration: boolean;
-	configConfirmed: boolean;
+	configLoaded: boolean;
 	calibrated: boolean;
 	error: string;
 }
 export type WarehouseAction =
-	| {
-			type:
-				| "start"
-				| "request"
-				| "check"
-				| "next"
-				| "validate"
-				| "stop"
-				| "reset"
-				| "edit";
-	  }
+	| { type: "tick" | "stop" | "reset" }
 	| {
 			type: "submit";
 			target: string;
@@ -132,18 +117,15 @@ export type WarehouseAction =
 			permitted: boolean;
 			available: boolean;
 			failCalibration: boolean;
-	  }
-	| { type: "configure"; confirmed: boolean }
-	| { type: "recover"; corrected: boolean }
-	| { type: "run"; authorized: boolean };
+	  };
 export const initialWarehouse = (): WarehouseState => ({
-	phase: "intro",
+	phase: "request",
 	target: "",
 	strategy: "",
 	permitted: false,
 	available: true,
 	failCalibration: false,
-	configConfirmed: false,
+	configLoaded: false,
 	calibrated: false,
 	error: "",
 });
@@ -152,76 +134,69 @@ export function warehouseTransition(
 	action: WarehouseAction,
 ): WarehouseState {
 	if (action.type === "reset") return initialWarehouse();
-	if (action.type === "start" && state.phase === "intro")
-		return { ...initialWarehouse(), phase: "a-running" };
-	if (action.type === "request" && state.phase === "a-running")
-		return { ...state, phase: "request" };
 	if (action.type === "submit" && state.phase === "request") {
 		if (
 			action.target !== "B" ||
 			!["finish", "safe-stop"].includes(action.strategy)
 		)
 			return { ...state, error: "请选择目标工位 B 和当前任务处理策略。" };
-		return { ...state, ...action, phase: "checking", error: "" };
+		return {
+			...state,
+			target: action.target,
+			strategy: action.strategy,
+			permitted: action.permitted,
+			available: action.available,
+			failCalibration: action.failCalibration,
+			phase: "checking",
+			error: "",
+		};
 	}
-	if (action.type === "check" && state.phase === "checking") {
-		const reasons = [
-			!state.permitted && "尚未取得切换授权",
-			!state.available && "目标工位 B 不可用",
-		].filter(Boolean);
-		return reasons.length
-			? { ...state, phase: "blocked", error: reasons.join("；") }
-			: { ...state, phase: "exiting", error: "" };
+	if (action.type === "tick") {
+		if (state.phase === "checking") {
+			const reasons = [
+				!state.permitted && "任务未获授权",
+				!state.available && "工位 B 不可用",
+			].filter(Boolean);
+			return reasons.length
+				? {
+						...state,
+						phase: "blocked",
+						error: `${reasons.join("；")}。系统已拒绝切换，未迁移至 B。`,
+					}
+				: { ...state, phase: "exiting" };
+		}
+		if (state.phase === "exiting") return { ...state, phase: "migrating" };
+		if (state.phase === "migrating") return { ...state, phase: "configuring" };
+		if (state.phase === "configuring")
+			return { ...state, phase: "calibrating", configLoaded: true };
+		if (
+			state.phase === "calibrating" &&
+			state.configLoaded &&
+			state.permitted &&
+			state.available
+		)
+			return state.failCalibration
+				? {
+						...state,
+						phase: "fault",
+						calibrated: false,
+						error:
+							"坐标标定偏差超出模拟许可范围，系统已安全停止并报告异常，未启动 B 工位任务。",
+					}
+				: { ...state, phase: "b-ready", calibrated: true };
+		if (
+			state.phase === "b-ready" &&
+			state.calibrated &&
+			state.configLoaded &&
+			state.permitted &&
+			state.available
+		)
+			return { ...state, phase: "b-running" };
 	}
-	if (action.type === "edit" && ["checking", "blocked"].includes(state.phase))
-		return { ...state, phase: "request", error: "" };
-	if (action.type === "next" && state.phase === "exiting")
-		return { ...state, phase: "migrating" };
-	if (action.type === "next" && state.phase === "migrating")
-		return { ...state, phase: "configuring" };
-	if (action.type === "configure" && state.phase === "configuring")
-		return action.confirmed
-			? { ...state, phase: "calibrating", configConfirmed: true, error: "" }
-			: {
-					...state,
-					error: "请先确认工位 B 的技能、任务参数与外设配置已加载。",
-				};
 	if (
-		action.type === "validate" &&
-		state.phase === "calibrating" &&
-		state.configConfirmed &&
-		state.permitted &&
-		state.available
+		action.type === "stop" &&
+		!["request", "safe-stop", "blocked", "fault"].includes(state.phase)
 	)
-		return state.failCalibration
-			? {
-					...state,
-					phase: "fault",
-					calibrated: false,
-					error:
-						"坐标标定偏差超出模拟许可范围，安全检查未通过。工位 B 不可启动。",
-				}
-			: { ...state, phase: "b-ready", calibrated: true, error: "" };
-	if (action.type === "recover" && state.phase === "fault")
-		return action.corrected
-			? { ...state, phase: "calibrating", failCalibration: false, error: "" }
-			: {
-					...state,
-					error:
-						"请先确认模拟现场重新校准已完成，再重新检查。工位 B 仍不可启动。",
-				};
-	if (
-		action.type === "run" &&
-		state.phase === "b-ready" &&
-		state.calibrated &&
-		state.configConfirmed &&
-		state.permitted &&
-		state.available
-	)
-		return action.authorized
-			? { ...state, phase: "b-running", error: "" }
-			: { ...state, error: "请确认启动工位 B 的模拟任务。" };
-	if (action.type === "stop" && !["intro", "safe-stop"].includes(state.phase))
 		return { ...state, phase: "safe-stop", calibrated: false, error: "" };
 	return state;
 }

@@ -10,7 +10,7 @@ const modules = home
 			"移动感知：观察授权区域与预设物品",
 			"轻量操作臂：受限轻小物品取放",
 			"小型轮式底盘：家庭单层移动与避障",
-			"独立中控机箱：家庭权限、任务与家居协同",
+			"独立中控机箱：集中计算、终端数据与用户习惯",
 		]
 	: [
 			"工业感知：识别受支持的包裹与姿态",
@@ -89,7 +89,7 @@ const modules = home
       {(home ? [{x:61,y:80,n:1},{x:435,y:93,n:2},{x:51,y:233,n:3},{x:487,y:240,n:4}] : [{x:58,y:63,n:1},{x:480,y:75,n:2},{x:59,y:278,n:3},{x:478,y:271,n:4}]).map(({x,y,n}) => <g><circle cx={x} cy={y} r="14" class="badge" /><text x={x} y={y + 5} text-anchor="middle" stroke="none" fill="currentColor">{n}</text></g>)}
     </g>}
   </svg>
-  {!compact && <figcaption><span class="caption">{home ? "家庭轻量形态 · 机器人与中控分体部署" : "工业承载形态 · 高负载、高刚度设计方向"}</span><ol>{modules.map((module) => <li>{module}</li>)}</ol><p class="form-boundary">{home ? "中控机箱独立于机器人本体，负责家庭级权限与任务协同；机器人保留本地运动控制、安全保护与停止能力。" : "形态表达承载与刚度优先的设计取舍；额定负载、刚度、尺寸与末端规格仍需依据包裹谱与工程评估确定。"}</p></figcaption>}
+  {!compact && <figcaption><span class="caption">{home ? "家庭轻量形态 · 机器人与中控分体部署" : "工业承载形态 · 高负载、高刚度设计方向"}</span><ol>{modules.map((module) => <li>{module}</li>)}</ol><p class="form-boundary">{home ? "独立机箱卸载本体计算，统一处理和存储授权终端数据与用户习惯；可部署在墙体中或房屋外，将计算散热噪声移离机器人。本体保留运动控制、安全保护与停止能力。" : "宽轮距承载底盘、加固基座与粗壮操作臂，突出承载与刚度优先的设计。"}</p></figcaption>}
 </figure>
 <style>
   .robot-form { --robot-accent: #b57a45; margin: 0; color: var(--deep-text); }

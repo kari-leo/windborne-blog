@@ -5,7 +5,8 @@
     border: 1px solid var(--line-color);
     border-radius: 0.75rem;
     background: var(--card-bg);
-    overflow-x: auto;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .custom-md .mermaid-source {
@@ -20,7 +21,7 @@
 
 .custom-md .mermaid-output > svg {
     display: block;
-    max-width: none;
+    max-width: 100%;
     height: auto;
     margin-inline: auto;
 }
@@ -30,3 +31,21 @@
     color: var(--primary);
     font-size: 0.875rem;
 }
+
+.custom-md .mermaid-viewport { width: 100%; max-height: min(65vh, 32rem); overflow: auto; overscroll-behavior: contain; scrollbar-gutter: stable; border: 1px solid var(--line-color); border-radius: .4rem; }
+.custom-md .mermaid-output { min-width: 100%; display: flex; justify-content: center; padding-block: .5rem; }
+.custom-md .mermaid-viewport .mermaid-output > svg { flex-shrink: 0; max-width: none; }
+.custom-md .mermaid-controls { display: flex; align-items: center; flex-wrap: wrap; gap: .4rem; margin-bottom: .75rem; }
+.custom-md .mermaid-controls button, .custom-md .mermaid-viewer-header button { min-height: 2.75rem; padding: .5rem .7rem; border: 1px solid var(--line-color); border-radius: .35rem; color: var(--deep-text); background: var(--card-bg); font: inherit; font-size: .75rem; cursor: pointer; }
+.custom-md .mermaid-controls button:hover, .custom-md .mermaid-viewer-header button:hover { background: var(--btn-regular-bg); }
+.custom-md .mermaid-controls button[aria-pressed="true"] { color: var(--primary); background: var(--btn-regular-bg); }
+.custom-md .mermaid-controls button:disabled { opacity: .45; cursor: not-allowed; }
+.custom-md .mermaid-scale { min-width: 2.8rem; text-align: center; font-size: .7rem; color: var(--btn-content); font-variant-numeric: tabular-nums; }
+.custom-md .mermaid-controls button:focus-visible, .custom-md .mermaid-viewport:focus-visible, .custom-md .mermaid-viewer-header button:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.custom-md .mermaid-viewer { width: calc(100vw - 1rem); max-width: 90rem; height: calc(100dvh - 1rem); max-height: none; padding: 1rem; margin: auto; border: 1px solid var(--line-color); border-radius: .75rem; background: var(--card-bg); color: var(--deep-text); }
+.custom-md .mermaid-viewer[open] { display: flex; flex-direction: column; }
+.custom-md .mermaid-viewer::backdrop { background: rgb(0 0 0 / .4); }
+.custom-md .mermaid-viewer-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: .75rem; }
+.custom-md .mermaid-viewer-header h2 { margin: 0; font-size: 1rem; }
+.custom-md .mermaid-viewer > .mermaid-viewport { flex: 1; min-height: 0; max-height: none; }
+@media (max-width: 540px) { .custom-md .mermaid-diagram { padding: .75rem; } .custom-md .mermaid-viewer { padding: .75rem; } }

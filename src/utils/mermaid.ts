@@ -1,3 +1,5 @@
+import { attachMermaidViewer } from "./mermaid-viewer";
+
 let mermaidModule: Promise<typeof import("mermaid")> | undefined;
 let renderQueue = Promise.resolve();
 let diagramId = 0;
@@ -9,7 +11,18 @@ function currentTheme() {
 }
 
 class MermaidDiagram extends HTMLElement {
+	private disposeViewer?: () => void;
+	disconnectedCallback() {
+		this.disposeViewer?.();
+		this.disposeViewer = undefined;
+	}
+	private setupViewer() {
+		this.disposeViewer?.();
+		const output = this.querySelector<HTMLElement>(".mermaid-output");
+		if (output) this.disposeViewer = attachMermaidViewer(this, output);
+	}
 	connectedCallback() {
+		this.setupViewer();
 		this.scheduleRender();
 	}
 
@@ -24,8 +37,12 @@ class MermaidDiagram extends HTMLElement {
 	}
 
 	private showError() {
+		this.disposeViewer?.();
+		this.disposeViewer = undefined;
 		this.classList.remove("mermaid-rendered");
 		this.querySelector(".mermaid-output")?.remove();
+		this.querySelector(".mermaid-controls")?.remove();
+		this.querySelector(".mermaid-viewport")?.remove();
 		if (this.querySelector(".mermaid-error")) return;
 		const message = document.createElement("p");
 		message.className = "mermaid-error";
@@ -69,15 +86,8 @@ class MermaidDiagram extends HTMLElement {
 			);
 			if (!this.isConnected) return;
 			output.innerHTML = svg;
-			// Keep wide diagrams readable; the surrounding card scrolls horizontally.
-			const renderedSvg = output.querySelector("svg");
-			if (renderedSvg && renderedSvg.viewBox.baseVal.width > 0) {
-				renderedSvg.setAttribute(
-					"width",
-					String(renderedSvg.viewBox.baseVal.width),
-				);
-			}
 			bindFunctions?.(output);
+			this.setupViewer();
 			this.querySelector(".mermaid-error")?.remove();
 			this.classList.add("mermaid-rendered");
 		} catch (error) {

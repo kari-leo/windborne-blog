@@ -3,6 +3,7 @@ import { getProjectDocumentUrl } from "@utils/url-utils";
 import HomePrototype from "./HomePrototype.svelte";
 import ReTaskPrototype from "./ReTaskPrototype.svelte";
 import RobotForm from "./RobotForm.astro";
+import TechnicalDemo from "./TechnicalDemo.svelte";
 
 interface Props {
 	product: "homeagent" | "retask";
@@ -13,19 +14,20 @@ const name = home ? "HomeAgent" : "迁作 ReTask";
 const doc = (slug: string) => getProjectDocumentUrl("homeagent", slug);
 ---
 <div class:list={["showcase", home ? "home" : "warehouse"]} data-pagefind-body>
-  <nav class="showcase-nav" aria-label={`${name} 展示页导航`}><a href="#form">产品形态</a><a href="#scenario">使用场景</a><a href="#interface">体验交互原型</a><a href="#demo">技术 Demo <span>规划中</span></a></nav>
+  <nav class="showcase-nav" aria-label={`${name} 展示页导航`}><a href="#form">产品形态</a><a href="#scenario">使用场景</a><a href="#interface">体验交互原型</a><a href="#demo">技术 Demo <span>网页端演示</span></a></nav>
 
   <section id="form" aria-labelledby="form-heading">
     <div class="section-heading"><span>01 / FORM & SYSTEM</span><h2 id="form-heading">{home ? "轻量机器人，与独立本地中控协同" : "面向工业负载与刚度的移动操作系统"}</h2></div>
-    <p class="intro">{home ? "轻量小型的轮式本体与受限操作臂适配家庭通行和轻小物品取送。本地中控是独立部署的机箱，通过本地网络与机器人协同；家庭权限与任务调度由中控承接，运动控制和安全停止保留在机器人本体。" : "宽轮距、低重心的承载底盘，加固安装基座与粗壮操作臂，表达面向工业环境的高负载、高刚度设计方向。感知、可配置末端与本体安全控制形成操作单元；具体负载、刚度、尺寸与末端规格待包裹谱和工程评估确定。"}</p>
-    <div class="form-panel"><RobotForm product={product} /><div class="system-chain"><span>{home ? "家庭成员 · App / 语音" : "现场操作员 · 任务入口"}</span><span aria-hidden="true">↓</span><span>{home ? "独立中控机箱 · 权限 / 调度 / 家居协同" : "任务编排 · 工位配置 / 技能库"}</span><span class:list={[home && "bidirectional"]} aria-hidden="true">{home ? "↔" : "↓"}</span><span>{home ? "轻量机器人本体 · 移动 / 感知 / 受限取放" : "工业机器人本体 · 移动 / 感知 / 包裹操作"}</span><span class="bidirectional" aria-hidden="true">↔</span><span>本体独立安全控制 / 停止 / 异常反馈</span></div></div>
+    <p class="intro">{home ? "轻量小型的轮式本体与受限操作臂适配家庭通行和轻小物品取送。独立中控机箱承接集中计算、家庭数据与任务调度，通过本地网络与各智能终端协同；运动控制与安全停止保留在机器人本体。" : "宽轮距、低重心的承载底盘，加固安装基座与粗壮操作臂，表达面向工业环境的高负载、高刚度设计方向。感知、可配置末端与本体安全控制形成操作单元。"}</p>
+    {home && <div class="scenario-context"><div><h3>减轻本体计算负担</h3><p>将高负载推理、任务规划等计算交给中控，使机器人本体专注于实时感知、运动执行与安全控制。</p></div><div><h3>统一家庭数据与习惯</h3><p>在用户授权范围内，集中处理和存储所有智能终端的数据与用户习惯，为跨设备协同提供共享记忆。</p></div><div><h3>降低机器人运行噪声</h3><p>将高算力机箱及其散热噪声移离机器人，可部署在墙体中或房屋外，减少居住空间中的噪声干扰。</p></div></div>}
+    <div class="form-panel"><RobotForm product={product} /><div class="system-chain"><span>{home ? "家庭成员 · App / 语音设定任务" : "现场操作员 · 设定目标任务"}</span><span aria-hidden="true">↓</span><span>{home ? "独立中控机箱 · 计算 / 数据与习惯 / 调度" : "自主任务编排 · 工位配置 / 技能库"}</span><span class:list={[home && "bidirectional"]} aria-hidden="true">{home ? "↔" : "↓"}</span><span>{home ? "轻量机器人本体 · 移动 / 感知 / 受限取放" : "工业机器人本体 · 移动 / 感知 / 包裹操作"}</span><span class="bidirectional" aria-hidden="true">↔</span><span>本体独立安全控制 / 停止 / 结果反馈</span></div></div>
     <p class="note">{home ? "概念边界：授权的单层家庭、预设取物与交付位置、受支持的轻小物品；高层任务指令不能绕过本地安全与权限。" : "概念边界：受支持的包裹集与经过验证的工位；任务编排服从本地安全、校准与产线互锁。移动模块的必要性仍需与固定方案比较。"}</p>
   </section>
 
   <section id="scenario" aria-labelledby="scenario-heading">
     <div class="section-heading"><span>02 / SCENARIO</span><h2 id="scenario-heading">{home ? "在床上休息，让书来到身边" : "先在工位 A 完成任务，再评估切换到 B"}</h2></div>
-    <p class="intro">{home ? "概念情境：用户正在卧室床上休息，想读放在客厅预设位置的一本书，希望不为一次简单取物中断休息。用户选择书和床边指定安全交付区，确认任务；机器人模拟取书、运送和交付，用户确认收到后结束。" : "候选情境：同一仓库的 A 工位处理受限包裹重新上件，B 工位承担第二上件任务。在两站错峰的窗口内，同一设备通过迁移、重新配置与校准切换任务。"}</p>
-    {home && <div class="scenario-context"><div><h3>现有办法</h3><p>自己起身拿取、请在场家人帮忙，或提前把书放在手边；这些办法仍需行动、协调或事先准备。</p></div><div><h3>价值假设</h3><p>让机器人代为完成重复的短距离取送，减少状态中断。任务是否足够频繁、值得付费，仍需研究。</p></div><div><h3>适用边界</h3><p>限定已登记书籍、预设取物点、授权室内路线与床边安全交付区；不承诺任意物品操作或护理能力。</p></div></div>}
+    <p class="intro">{home ? "概念情境：用户正在卧室床上休息，想读放在客厅预设位置的一本书，希望不为一次简单取物中断休息。用户设定书和床边指定安全交付区后，机器人自主取书、运送、放置验证并通知结果。" : "候选情境：同一仓库的 A 工位处理受限包裹重新上件，B 工位承担第二上件任务。在两站错峰的窗口内，操作员设定目标任务与当前任务处理策略；系统自主完成安全退出、迁移、配置、校准与新任务启动。"}</p>
+    {home && <div class="scenario-context"><div><h3>现有办法</h3><p>自己起身拿取、请在场家人帮忙，或提前把书放在手边；这些办法仍需行动、协调或事先准备。</p></div><div><h3>价值假设</h3><p>让机器人代为完成重复的短距离取送，减少状态中断。任务是否足够频繁、值得付费，仍需研究。</p></div><div><h3>适用边界</h3><p>限定已登记书籍、预设取物点、授权室内路线与床边安全交付区。</p></div></div>}
     <figure class="scene">
       {home ? <svg viewBox="0 0 680 340" role="img" aria-label="概念场景：用户在卧室床上休息，机器人沿授权路线从客厅预设位置取书，送至床边指定安全交付区">
         <g class="room" stroke-width="2"><rect x="25" y="25" width="270" height="185" rx="8" /><rect x="385" y="25" width="270" height="185" rx="8" /><rect x="25" y="235" width="630" height="80" rx="8" /></g>
@@ -46,19 +48,22 @@ const doc = (slug: string) => getProjectDocumentUrl("homeagent", slug);
       </svg>}
       <figcaption><span>概念场景</span><span class="legend-key"></span> 授权路线 / 迁移示意 <span class="legend-object"></span> {home ? "书 · 支持物品" : "受限包裹"} <span class="legend-robot">R</span> 机器人部署位置</figcaption>
     </figure>
-    <ol class="task-flow">{(home ? ["选择书与床边交付区", "确认范围与授权", "模拟取书与运送", "送达通知 / 用户确认"] : ["A 工位受限操作", "评估错峰与共享", "迁移 / 配置 / 校准", "B 工位检查后执行"]).map((step, index) => <li><span>0{index + 1}</span>{step}</li>)}</ol>
-    <p class="note">{home ? "送达后等待用户确认，确认前不显示完成。书不在预设位置或床边交付区被占用时暂停，允许处理后重试、取消或转人工。以下均为概念方案与模拟交互。" : "反证条件：若两站峰值重叠、固定机构可覆盖两站，或重新配置节约不足以覆盖迁移与运维代价，应缩小范围或转向固定方案。"}</p>
+    <ol class="task-flow">{(home ? ["用户设定物品与交付区", "系统检查任务范围", "自主取书 / 运送 / 放置", "系统验证并通知结果"] : ["操作员设定目标任务", "系统检查并安全退出", "自主迁移 / 配置 / 校准", "自动启动 B 并通知结果"]).map((step, index) => <li><span>0{index + 1}</span>{step}</li>)}</ol>
+    <p class="note">{home ? "用户只在最初设定任务，正常执行无需逐步确认。书不在预设位置或交付区被占用时，系统停止相关动作并报告未完成原因。" : "正常切换由系统自主完成，工位不可用或校准失败时停止切换并反馈原因。若两站峰值重叠、固定机构可覆盖两站，或重新配置节约不足以覆盖迁移与运维代价，应缩小范围或转向固定方案。"}</p>
   </section>
 
   <section id="interface" aria-labelledby="interface-heading">
-    <div class="section-heading"><span>03 / INTERFACE PROTOTYPE</span><h2 id="interface-heading">{home ? "亲自完成一次床边取书" : "亲自完成 A → B 的切换"}</h2></div>
-    <p class="intro">{home ? "选择任务、确认权限、推进取送并确认收到；切换模拟情境可体验失败与恢复。" : "申请切换、完成前置检查、迁移与配置；校准通过后进入 B 就绪，再授权启动。也可触发校准失败并恢复。"}<span class="prototype-label">交互原型（模拟） · 本地状态演示</span></p>
+    <div class="section-heading"><span>03 / INTERFACE PROTOTYPE</span><h2 id="interface-heading">{home ? "设定一次取书任务，看系统自主完成" : "设定下一项任务，看系统自主切换"}</h2></div>
+    <p class="intro">{home ? "设定物品与交付区并提交，系统自动取送、验证放置并反馈结果。可在提交前展开演示情境，观察异常时的自动停止。" : "设定目标任务与退出策略并提交，系统自动检查、迁移、加载配置、校准与启动。可在提交前选择工位不可用或校准失败情境。"}<span class="prototype-label">交互原型（模拟） · 本地状态演示</span></p>
     {home ? <HomePrototype client:load /> : <ReTaskPrototype client:load />}
     <noscript><p class="note">请启用 JavaScript 体验可交互原型；本页的产品形态与场景说明仍可阅读。</p></noscript>
   </section>
 
-  <section id="demo" class="demo-placeholder" aria-labelledby="demo-heading">
-    <div><span class="small-label">04 / TECHNICAL DEMO</span><h2 id="demo-heading">{name} 技术 Demo</h2><p>{home ? "真实设备取书、视觉识别与受限物理执行尚未实现；与上方可体验的前端交互原型分开。" : "真实设备迁移、产线连接与操作执行尚未实现；与上方可体验的前端交互原型分开。"}</p></div><span class="development-status">规划中</span>
+  <section id="demo" aria-labelledby="demo-heading">
+    <div class="section-heading"><span>04 / TECHNICAL DEMO</span><h2 id="demo-heading">{name} 技术 Demo</h2></div>
+    <p class="intro">{home ? "在简化的家庭三维场景中，沿固定轨迹演示取书与交付。选择正常送书、交付区占用或书籍掉落样例，观察机器人本体端、中控端与用户端的任务和状态如何同步变化。" : "A 工位负责搬运补料，B 工位按物品颜色标签分类。迁移路线受阻时，本体在授权区域内切换局部跟踪路线并继续执行；对应类别分拣区满载时停止任务。三个状态框同步展示机器人本体端、中控端与用户端的任务、反馈和结果。"}</p>
+    <TechnicalDemo product={product} client:visible />
+    <noscript><p class="note">请启用 JavaScript 运行三维场景和局部物理计算。</p></noscript>
   </section>
   <div class="related-links"><a href={doc(home ? "home-agent" : "retask")}>阅读 {name} 完整产品说明 →</a><a href={doc("decision-case-study")}>查看关键决策 Case Study →</a></div>
 </div>
@@ -77,7 +82,6 @@ const doc = (slug: string) => getProjectDocumentUrl("homeagent", slug);
   .scene { background: var(--btn-regular-bg); border: 1px solid var(--line-color); border-radius: .5rem; overflow: hidden; } .scene svg { width: 100%; height: auto; display: block; } .room { fill: var(--card-bg); stroke: var(--line-color); } .furniture { fill: var(--btn-regular-bg); stroke: var(--btn-content); stroke-width: 1; } .object { fill: var(--concept-accent); opacity: .8; } .route { fill: none; stroke: var(--concept-accent); stroke-width: 3; stroke-dasharray: 7 6; } .route-end { fill: none; stroke: var(--concept-accent); stroke-width: 3; } .robot { fill: var(--deep-text); } .robot-text { fill: var(--card-bg); font: 600 21px sans-serif; } .map-text { fill: var(--deep-text); font: 20px sans-serif; } .secondary { font-size: 17px; fill: var(--btn-content); }
   .scene figcaption { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; padding: 1rem 1.25rem; border-top: 1px solid var(--line-color); font-size: .7rem; color: var(--btn-content); } .legend-key { width: 1.3rem; border-top: 2px dashed var(--concept-accent); } .legend-object { width: .7rem; height: .7rem; background: var(--concept-accent); margin-left: .5rem; } .legend-robot { padding: 0 .3rem; font-size: .65rem; color: var(--card-bg); background: var(--deep-text); border-radius: 50%; margin-left: .5rem; }
   .task-flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8rem; margin-top: 1.2rem; list-style: none; } .task-flow li { border-top: 2px solid var(--line-color); padding-top: .7rem; font-size: .75rem; line-height: 1.8; } .task-flow span { display: block; color: var(--concept-accent); font-size: .65rem; margin-bottom: .4rem; }
-  .demo-placeholder { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-top: 3rem; padding: 1.5rem; border: 1px dashed var(--btn-content); border-radius: .5rem; background: var(--btn-regular-bg); } .demo-placeholder h2 { font-size: 1.1rem; } .demo-placeholder p { font-size: .8rem; color: var(--btn-content); line-height: 1.9; margin-top: .7rem; } .development-status { flex-shrink: 0; font-size: .7rem; border: 1px solid var(--line-color); border-radius: 2rem; padding: .3rem .65rem; color: var(--btn-content); }
   .related-links { display: flex; flex-wrap: wrap; gap: 1rem 2rem; margin-top: 2rem; font-size: .8rem; color: var(--primary); }
-  @media (max-width: 640px) { .scenario-context { grid-template-columns: 1fr; } .task-flow { grid-template-columns: 1fr 1fr; } .demo-placeholder { flex-direction: column-reverse; } .system-chain { flex-direction: column; } .system-chain .bidirectional { transform: rotate(90deg); } }
+  @media (max-width: 640px) { .scenario-context { grid-template-columns: 1fr; } .task-flow { grid-template-columns: 1fr 1fr; } .system-chain { flex-direction: column; } .system-chain .bidirectional { transform: rotate(90deg); } }
 </style>

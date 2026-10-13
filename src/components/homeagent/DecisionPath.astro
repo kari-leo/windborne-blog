@@ -29,7 +29,7 @@ const nodes = [
 <figure class="decision-path" aria-labelledby="path-caption">
   <figcaption id="path-caption"><span>方向收敛</span><strong>用约束逐步收敛产品边界</strong></figcaption>
   <ol>{nodes.map((node, index) => <li><div class="node"><span class="node-index">0{index + 1}</span><div><a href={`#node-${index + 1}`}><h2>{node.title}</h2></a><p>{node.question}</p><strong>{node.direction}</strong></div></div><p class="alternative">{node.alternative}</p>{index < nodes.length - 1 && <span class="flow-arrow" aria-hidden="true">↓</span>}</li>)}</ol>
-  <div class="validation">下一步：客户发现 → 固定工位基线 → 两工位复用检验 → 受限现场试点<br /><span>每一关都允许继续、缩小范围或停止；尚未完成验证。</span></div>
+  <div class="validation">下一步：客户发现 → 固定工位基线 → 两工位复用检验 → 受限现场试点<br /><span>每一关都允许继续、缩小范围或停止。</span></div>
 </figure>
 <style>
   .decision-path { margin: 0 0 2.5rem; border: 1px solid var(--line-color); border-radius: .6rem; background: var(--card-bg); padding: 1.5rem; color: var(--deep-text); }

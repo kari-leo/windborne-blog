@@ -2,7 +2,7 @@
 project: homeagent
 title: ReTask｜产品概念与操作界面
 navTitle: ReTask 产品设计
-description: 展示可重配置移动操作系统与仓储候选工位，体验 A → B 切换成功、校准阻塞与恢复的模拟交互。
+description: 展示跨工位搬运与颜色分类，体验正常完成、授权区域内局部绕障和分拣区满载失败的三维 Demo，并观察三端状态。
 order: 30
 ---
 
