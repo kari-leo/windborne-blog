@@ -13,6 +13,7 @@ pnpm dev
 
 | 命令 | 用途 |
 |---|---|
+| `pnpm lint:ci` | 与 GitHub CI 一致的格式、导入排序与代码质量检查 |
 | `pnpm check` | Astro、TypeScript 与 Svelte 检查 |
 | `pnpm build` | 生成静态站点与 Pagefind 搜索索引 |
 | `pnpm preview` | 预览构建结果 |
@@ -29,7 +30,7 @@ pnpm dev
 - `docs/`：分析配置、产品设计记录与技术 Demo 说明。
 - `scripts/`：文章创建工具与功能检查脚本。
 
-发布前运行 `pnpm check` 和 `pnpm build`。修改域名时同步更新 `astro.config.mjs` 的 `site`。
+发布前依次运行 `pnpm lint:ci`、`pnpm check` 和 `pnpm build`。修改域名时同步更新 `astro.config.mjs` 的 `site`。
 
 ## 功能检查
 

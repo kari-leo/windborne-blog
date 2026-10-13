@@ -1,6 +1,11 @@
 <script lang="ts">
 import { onMount } from "svelte";
-import { DemoSimulation, samples, type DemoProduct, type DemoSample } from "./technical-demo-model";
+import {
+	type DemoProduct,
+	type DemoSample,
+	DemoSimulation,
+	samples,
+} from "./technical-demo-model";
 import type { DemoView } from "./technical-demo-scene";
 export let product: DemoProduct;
 let sample: DemoSample = "normal";
@@ -15,8 +20,15 @@ let ready = false;
 let error = "";
 let speed = "1.5";
 let visible = true;
-const statusNames = { idle: "等待任务", running: "执行中", success: "已完成", fault: "异常停止", stopped: "主动停止" };
-$: selected = samples[product].find((entry) => entry.id === sample) ?? samples[product][0];
+const statusNames = {
+	idle: "等待任务",
+	running: "执行中",
+	success: "已完成",
+	fault: "异常停止",
+	stopped: "主动停止",
+};
+$: selected =
+	samples[product].find((entry) => entry.id === sample) ?? samples[product][0];
 function sync() {
 	state = simulation.snapshot();
 	terminals = simulation.terminals();
@@ -57,17 +69,31 @@ onMount(() => {
 	let frame = 0;
 	let last = 0;
 	let publish = 0;
-	const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }, { threshold: 0 });
+	const observer = new IntersectionObserver(
+		([entry]) => {
+			visible = entry.isIntersecting;
+		},
+		{ threshold: 0 },
+	);
 	observer.observe(wrapper);
-	import("./technical-demo-scene").then((module) => {
-		if (disposed) return;
-		createView = module.createDemoView;
-		setupScene();
-	}).catch(() => { if (!disposed) error = "场景资源加载失败，请刷新页面重试。"; });
+	import("./technical-demo-scene")
+		.then((module) => {
+			if (disposed) return;
+			createView = module.createDemoView;
+			setupScene();
+		})
+		.catch(() => {
+			if (!disposed) error = "场景资源加载失败，请刷新页面重试。";
+		});
 	function animate(now: number) {
 		const dt = last ? Math.min((now - last) / 1000, 0.05) : 0;
 		last = now;
-		if (view && visible && !document.hidden && simulation.state.status === "running") {
+		if (
+			view &&
+			visible &&
+			!document.hidden &&
+			simulation.state.status === "running"
+		) {
 			simulation.step(dt * Number(speed));
 			view.render(simulation.state);
 			if (now - publish > 100 || simulation.state.status !== "running") {

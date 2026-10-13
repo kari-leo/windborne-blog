@@ -515,7 +515,7 @@ export class DemoSimulation {
 				s.held = null;
 				s.dropping = true;
 				s.evidence = `保持力 ${this.scene.holdForce.toFixed(1)} N < 重力 ${(this.scene.itemMass * 9.81).toFixed(2)} N`;
-				this.event("机器人本体端", s.evidence + "，停止底盘并检测物体掉落");
+				this.event("机器人本体端", `${s.evidence}，停止底盘并检测物体掉落`);
 				this.event("中控端", "暂停轨迹，等待掉落检测结果");
 				return;
 			}
@@ -607,7 +607,7 @@ export class DemoSimulation {
 		}
 		this.event(
 			id === "dispatch" || id === "configureB" ? "中控端" : "机器人本体端",
-			stage.label + "：完成",
+			`${stage.label}：完成`,
 		);
 		s.stage++;
 		s.stageTime = 0;

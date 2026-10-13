@@ -19,7 +19,8 @@ const labels = {
 	error: "本次取送未完成",
 	cancelled: "任务已停止（模拟）",
 };
-$: currentStep = state.phase === "create" ? 0 : state.phase === "execute" ? 1 : 2;
+$: currentStep =
+	state.phase === "create" ? 0 : state.phase === "execute" ? 1 : 2;
 function dispatch(action: HomeAction) {
 	state = homeTransition(state, action);
 	if (action.type === "reset") {

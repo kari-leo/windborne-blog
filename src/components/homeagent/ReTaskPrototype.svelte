@@ -26,7 +26,8 @@ const labels: Record<WarehousePhase, string> = {
 	"safe-stop": "系统已响应停止请求（模拟）",
 };
 $: active = warehouseStages.findIndex((stage) => stage.phase === state.phase);
-$: progressIndex = state.phase === "blocked" ? 0 : state.phase === "fault" ? 4 : active;
+$: progressIndex =
+	state.phase === "blocked" ? 0 : state.phase === "fault" ? 4 : active;
 $: executing = active >= 0;
 $: currentStep = state.phase === "request" ? 0 : executing ? 1 : 2;
 function dispatch(action: WarehouseAction) {
