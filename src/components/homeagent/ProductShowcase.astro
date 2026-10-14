@@ -21,15 +21,15 @@ const doc = (slug: string) => getProjectDocumentUrl("homeagent", slug);
     <p class="intro">{home ? "轻量小型的轮式本体与受限操作臂适配家庭通行和轻小物品取送。独立中控机箱承接集中计算、家庭数据与任务调度，通过本地网络与各智能终端协同；运动控制与安全停止保留在机器人本体。" : "宽轮距、低重心的承载底盘，加固安装基座与粗壮操作臂，表达面向工业环境的高负载、高刚度设计方向。感知、可配置末端与本体安全控制形成操作单元。"}</p>
     {home && <div class="scenario-context"><div><h3>减轻本体计算负担</h3><p>将高负载推理、任务规划等计算交给中控，使机器人本体专注于实时感知、运动执行与安全控制。</p></div><div><h3>统一家庭数据与习惯</h3><p>在用户授权范围内，集中处理和存储所有智能终端的数据与用户习惯，为跨设备协同提供共享记忆。</p></div><div><h3>降低机器人运行噪声</h3><p>将高算力机箱及其散热噪声移离机器人，可部署在墙体中或房屋外，减少居住空间中的噪声干扰。</p></div></div>}
     <div class="form-panel"><RobotForm product={product} /><div class="system-chain"><span>{home ? "家庭成员 · App / 语音设定任务" : "现场操作员 · 设定目标任务"}</span><span aria-hidden="true">↓</span><span>{home ? "独立中控机箱 · 计算 / 数据与习惯 / 调度" : "自主任务编排 · 工位配置 / 技能库"}</span><span class:list={[home && "bidirectional"]} aria-hidden="true">{home ? "↔" : "↓"}</span><span>{home ? "轻量机器人本体 · 移动 / 感知 / 受限取放" : "工业机器人本体 · 移动 / 感知 / 包裹操作"}</span><span class="bidirectional" aria-hidden="true">↔</span><span>本体独立安全控制 / 停止 / 结果反馈</span></div></div>
-    <p class="note">{home ? "概念边界：授权的单层家庭、预设取物与交付位置、受支持的轻小物品；高层任务指令不能绕过本地安全与权限。" : "概念边界：受支持的包裹集与经过验证的工位；任务编排服从本地安全、校准与产线互锁。移动模块的必要性仍需与固定方案比较。"}</p>
+    <p class="note">{home ? "概念边界：授权的单层家庭、物品定位与指定交付位置、受支持的轻小物品；高层任务指令不能绕过本地安全与权限。" : "概念边界：受支持的包裹集与经过验证的工位；任务编排服从本地安全、校准与产线互锁。移动模块的必要性仍需与固定方案比较。"}</p>
   </section>
 
   <section id="scenario" aria-labelledby="scenario-heading">
     <div class="section-heading"><span>02 / SCENARIO</span><h2 id="scenario-heading">{home ? "在床上休息，让书来到身边" : "先在工位 A 完成任务，再评估切换到 B"}</h2></div>
-    <p class="intro">{home ? "概念情境：用户正在卧室床上休息，想读放在客厅预设位置的一本书，希望不为一次简单取物中断休息。用户设定书和床边指定安全交付区后，机器人自主取书、运送、放置验证并通知结果。" : "候选情境：同一仓库的 A 工位处理受限包裹重新上件，B 工位承担第二上件任务。在两站错峰的窗口内，操作员设定目标任务与当前任务处理策略；系统自主完成安全退出、迁移、配置、校准与新任务启动。"}</p>
-    {home && <div class="scenario-context"><div><h3>现有办法</h3><p>自己起身拿取、请在场家人帮忙，或提前把书放在手边；这些办法仍需行动、协调或事先准备。</p></div><div><h3>价值假设</h3><p>让机器人代为完成重复的短距离取送，减少状态中断。任务是否足够频繁、值得付费，仍需研究。</p></div><div><h3>适用边界</h3><p>限定已登记书籍、预设取物点、授权室内路线与床边安全交付区。</p></div></div>}
+    <p class="intro">{home ? "概念情境：用户正在卧室床上休息，想读放在客厅的一本书，希望不为一次简单取物中断休息。用户设定书和床边指定安全交付区后，中控结合物品位置与交付目标规划路线和操作动作，机器人自主取书、运送、验证放置并通知结果。" : "候选情境：同一仓库的 A 工位处理受限包裹重新上件，B 工位承担第二上件任务。在两站错峰的窗口内，操作员设定目标任务与当前任务处理策略；系统自主完成安全退出、路线规划、迁移、配置、校准与新任务启动。"}</p>
+    {home && <div class="scenario-context"><div><h3>现有办法</h3><p>自己起身拿取、请在场家人帮忙，或提前把书放在手边；这些办法仍需行动、协调或事先准备。</p></div><div><h3>价值假设</h3><p>让机器人代为完成重复的短距离取送，减少状态中断。任务是否足够频繁、值得付费，仍需研究。</p></div><div><h3>适用边界</h3><p>根据已登记书籍与床边安全交付区，在授权室内区域规划取送路线。</p></div></div>}
     <figure class="scene">
-      {home ? <svg viewBox="0 0 680 340" role="img" aria-label="概念场景：用户在卧室床上休息，机器人沿授权路线从客厅预设位置取书，送至床边指定安全交付区">
+      {home ? <svg viewBox="0 0 680 340" role="img" aria-label="概念场景：用户在卧室床上休息，机器人沿规划路线从客厅取书，送至床边指定安全交付区">
         <g class="room" stroke-width="2"><rect x="25" y="25" width="270" height="185" rx="8" /><rect x="385" y="25" width="270" height="185" rx="8" /><rect x="25" y="235" width="630" height="80" rx="8" /></g>
         <g class="furniture"><rect x="48" y="110" width="70" height="70" rx="4" /><rect x="530" y="94" width="96" height="85" rx="4" /><rect x="540" y="102" width="33" height="19" rx="4" /><path d="M530 129H626" /><rect x="510" y="265" width="115" height="25" rx="4" /></g>
         <rect x="416" y="124" width="80" height="50" rx="4" class="delivery-zone" />
@@ -37,8 +37,8 @@ const doc = (slug: string) => getProjectDocumentUrl("homeagent", slug);
         <path d="M125 155H225V220H456V175" class="route" />
         <path d="M446 186L456 174L466 186" class="route-end" />
         <circle cx="336" cy="220" r="23" class="robot" /><text x="336" y="227" text-anchor="middle" class="robot-text">R</text>
-        <g class="map-text"><text x="48" y="61">客厅 · 预设取书点</text><text x="410" y="61">卧室 · 床边交付</text><text x="48" y="265">其他区域 / 禁入区</text><text x="48" y="293" class="secondary">权限边界不随任务扩大</text><text x="412" y="198" class="secondary">安全交付区</text><text x="539" y="198" class="secondary">用户休息</text></g>
-      </svg> : <svg viewBox="0 0 680 340" role="img" aria-label="仓储候选工位示意：A 工位从异常缓冲位重新上件，经授权路线迁移到 B 工位；需校准与安全检查，异常包裹转人工">
+        <g class="map-text"><text x="48" y="61">客厅 · 书籍位置</text><text x="410" y="61">卧室 · 床边交付</text><text x="48" y="265">其他区域 / 禁入区</text><text x="48" y="293" class="secondary">权限边界不随任务扩大</text><text x="412" y="198" class="secondary">安全交付区</text><text x="539" y="198" class="secondary">用户休息</text></g>
+      </svg> : <svg viewBox="0 0 680 340" role="img" aria-label="仓储候选工位示意：A 工位从异常缓冲位重新上件，沿规划路线迁移到 B 工位；需校准与安全检查，异常包裹转人工">
         <g class="room" stroke-width="2"><rect x="25" y="25" width="280" height="190" rx="8" /><rect x="375" y="25" width="280" height="190" rx="8" /><rect x="25" y="245" width="190" height="70" rx="8" /></g>
         <g class="furniture"><rect x="48" y="103" width="100" height="65" rx="4" /><rect x="185" y="100" width="95" height="70" rx="4" /><rect x="402" y="105" width="92" height="65" rx="4" /><rect x="530" y="100" width="100" height="70" rx="4" /></g>
         <g class="object"><rect x="68" y="116" width="33" height="24" rx="2" /><rect x="205" y="121" width="30" height="24" rx="2" /><rect x="548" y="118" width="32" height="25" rx="2" /></g>
@@ -46,10 +46,10 @@ const doc = (slug: string) => getProjectDocumentUrl("homeagent", slug);
         <circle cx="165" cy="145" r="20" class="robot" /><text x="165" y="152" text-anchor="middle" class="robot-text">R</text>
         <g class="map-text"><text x="48" y="61">A · 包裹重新上件</text><text x="400" y="61">B · 第二工位上件</text><text x="48" y="193" class="secondary">异常缓冲 → 指定输送点</text><text x="400" y="194" class="secondary">校准 / 技能 / 安全检查</text><text x="44" y="287">异常件 → 人工</text><text x="262" y="286" class="secondary">错峰窗口迁移 · 工位概念图</text></g>
       </svg>}
-      <figcaption><span>概念场景</span><span class="legend-key"></span> 授权路线 / 迁移示意 <span class="legend-object"></span> {home ? "书 · 支持物品" : "受限包裹"} <span class="legend-robot">R</span> 机器人部署位置</figcaption>
+      <figcaption><span>概念场景</span><span class="legend-key"></span> 授权区域内的规划路线 <span class="legend-object"></span> {home ? "书 · 支持物品" : "受限包裹"} <span class="legend-robot">R</span> 机器人部署位置</figcaption>
     </figure>
-    <ol class="task-flow">{(home ? ["用户设定物品与交付区", "系统检查任务范围", "自主取书 / 运送 / 放置", "系统验证并通知结果"] : ["操作员设定目标任务", "系统检查并安全退出", "自主迁移 / 配置 / 校准", "自动启动 B 并通知结果"]).map((step, index) => <li><span>0{index + 1}</span>{step}</li>)}</ol>
-    <p class="note">{home ? "用户只在最初设定任务，正常执行无需逐步确认。书不在预设位置或交付区被占用时，系统停止相关动作并报告未完成原因。" : "正常切换由系统自主完成，工位不可用或校准失败时停止切换并反馈原因。若两站峰值重叠、固定机构可覆盖两站，或重新配置节约不足以覆盖迁移与运维代价，应缩小范围或转向固定方案。"}</p>
+    <ol class="task-flow">{(home ? ["用户设定物品与交付区", "系统检查任务范围", "自主规划 / 取书 / 运送 / 放置", "系统验证并通知结果"] : ["操作员设定目标任务", "系统检查并安全退出", "自主规划 / 迁移 / 配置 / 校准", "自动启动 B 并通知结果"]).map((step, index) => <li><span>0{index + 1}</span>{step}</li>)}</ol>
+    <p class="note">{home ? "用户只在最初设定任务，正常执行无需逐步确认。未找到目标书籍或交付区被占用时，系统停止相关动作并报告未完成原因。" : "正常切换由系统自主完成，工位不可用或校准失败时停止切换并反馈原因。若两站峰值重叠、固定机构可覆盖两站，或重新配置节约不足以覆盖迁移与运维代价，应缩小范围或转向固定方案。"}</p>
   </section>
 
   <section id="interface" aria-labelledby="interface-heading">
@@ -61,7 +61,7 @@ const doc = (slug: string) => getProjectDocumentUrl("homeagent", slug);
 
   <section id="demo" aria-labelledby="demo-heading">
     <div class="section-heading"><span>04 / TECHNICAL DEMO</span><h2 id="demo-heading">{name} 技术 Demo</h2></div>
-    <p class="intro">{home ? "在简化的家庭三维场景中，沿固定轨迹演示取书与交付。选择正常送书、交付区占用或书籍掉落样例，观察机器人本体端、中控端与用户端的任务和状态如何同步变化。" : "A 工位负责搬运补料，B 工位按物品颜色标签分类。迁移路线受阻时，本体在授权区域内切换局部跟踪路线并继续执行；对应类别分拣区满载时停止任务。三个状态框同步展示机器人本体端、中控端与用户端的任务、反馈和结果。"}</p>
+    <p class="intro">{home ? "中控根据物品位置、交付目标与授权范围规划取送路线和操作动作，本体自主取书、运送并验证交付。可选择正常送书、交付区占用或书籍掉落情境，观察机器人本体端、中控端与用户端的任务和状态如何同步变化。" : "A 工位负责搬运补料，B 工位按物品颜色标签分类。迁移路线受阻时，本体在授权区域内自主规划局部绕行路线并继续执行；对应类别分拣区满载时停止任务。三个状态框同步展示机器人本体端、中控端与用户端的任务、反馈和结果。"}</p>
     <TechnicalDemo product={product} client:visible />
     <noscript><p class="note">请启用 JavaScript 运行三维场景和局部物理计算。</p></noscript>
   </section>

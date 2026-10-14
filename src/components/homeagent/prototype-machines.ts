@@ -6,7 +6,7 @@ export type HomePhase =
 	| "cancelled";
 export type HomeFault = "none" | "missing" | "occupied";
 export const homeStages = [
-	"前往客厅取物点",
+	"规划路线并前往客厅取物点",
 	"识别并取书",
 	"运送至卧室",
 	"放置并验证床边交付",
@@ -60,7 +60,7 @@ export function homeTransition(
 			return {
 				...state,
 				phase: "error",
-				error: "未在预设位置找到书籍，系统已停止本次取送并报告异常。",
+				error: "未在授权取物区域找到目标书籍，系统已停止本次取送并报告异常。",
 			};
 		if (state.step === 3 && state.fault === "occupied")
 			return {
@@ -92,7 +92,7 @@ export type WarehousePhase =
 export const warehouseStages = [
 	{ phase: "checking", label: "检查任务权限与工位可用性" },
 	{ phase: "exiting", label: "安全退出工位 A" },
-	{ phase: "migrating", label: "沿授权路线迁移至 B" },
+	{ phase: "migrating", label: "规划授权区域内路线并迁移至 B" },
 	{ phase: "configuring", label: "加载已登记的工位配置" },
 	{ phase: "calibrating", label: "自动校准与安全检查" },
 	{ phase: "b-ready", label: "检查通过，自动启动 B" },

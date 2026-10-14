@@ -58,7 +58,7 @@ onMount(() => {
             <label>当前任务处理策略<select bind:value={strategy}><option value="finish">完成当前包裹后退出</option><option value="safe-stop">安全停止并交接当前任务</option></select></label>
           </div>
           <details class="prototype-scenarios"><summary>演示情境</summary><div class="prototype-fields"><label>模拟结果<select bind:value={scenario}><option value="pass">正常切换并启动 B</option><option value="unavailable">目标工位 B 不可用</option><option value="fail">坐标标定偏差，校准失败</option></select></label></div></details>
-          <p class="prototype-notice">工位技能、参数与外设配置已预先登记。提交即授权本次切换及检查通过后的启动；执行条件由系统校验。</p>
+          <p class="prototype-notice">提交即授权本次切换及检查通过后的启动。系统规划迁移路线，根据目标工位加载技能、参数与外设配置，并校验执行条件。</p>
           <div class="prototype-actions"><button class="prototype-primary" type="submit">切换至 B 并执行任务</button></div>
         </form>
       {:else}

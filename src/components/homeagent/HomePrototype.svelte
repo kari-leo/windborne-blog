@@ -45,11 +45,11 @@ onMount(() => {
         <p>你正在卧室休息，只需设定要送来的书和交付位置。机器人自动完成取物、运送、放置验证与结果通知。</p>
         <form onsubmit={(event) => { event.preventDefault(); dispatch({ type: "submit", item, destination, fault: scenario, authorized: true }); }}>
           <div class="prototype-fields">
-            <label>取送物品<select bind:value={item}><option value="book">书 · 客厅预设取物点</option></select></label>
+            <label>取送物品<select bind:value={item}><option value="book">书 · 客厅取物点</option></select></label>
             <label>送达位置<select bind:value={destination}><option value="bedside">卧室床边指定安全交付区</option></select></label>
           </div>
-          <details class="prototype-scenarios"><summary>演示情境</summary><div class="prototype-fields"><label>模拟结果<select bind:value={scenario}><option value="none">正常取送</option><option value="missing">书不在预设位置</option><option value="occupied">床边交付区被占用</option></select></label></div></details>
-          <p class="prototype-notice">本演示已预设物品、路线与交付区权限。提交即授权本次取送，执行中可随时停止。</p>
+          <details class="prototype-scenarios"><summary>演示情境</summary><div class="prototype-fields"><label>模拟结果<select bind:value={scenario}><option value="none">正常取送</option><option value="missing">未找到目标书籍</option><option value="occupied">床边交付区被占用</option></select></label></div></details>
+          <p class="prototype-notice">提交即授权本次取送。中控根据物品位置与交付目标规划路线和操作动作，本体自主执行，执行中可随时停止。</p>
           <div class="prototype-actions"><button class="prototype-primary" type="submit">把书送到床边</button></div>
         </form>
       {:else}

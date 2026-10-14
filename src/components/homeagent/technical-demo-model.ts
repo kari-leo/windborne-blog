@@ -45,17 +45,18 @@ export const samples: Record<
 		{
 			id: "normal",
 			name: "正常送书",
-			description: "沿预设轨迹取书，释放后由重力落到交付台，验证放置。",
+			description:
+				"中控规划取送路线与抓取、放置动作，本体执行取书、运送并验证交付。",
 		},
 		{
 			id: "occupied",
 			name: "交付区占用",
-			description: "在交付台上放入占位箱，检测重叠后停止放置，保留夹持。",
+			description: "交付区被占用，检测到放置空间冲突后停止放置并保持夹持。",
 		},
 		{
 			id: "dropped",
 			name: "书籍掉落",
-			description: "降低运输段夹持保持力，书籍脱离夹具后受重力落地，任务终止。",
+			description: "运输中夹持保持力不足，书籍掉落后系统停止任务并报告异常。",
 		},
 	],
 	retask: [
@@ -68,7 +69,7 @@ export const samples: Record<
 			id: "obstacle",
 			name: "授权区域内绕障",
 			description:
-				"迁移时检测到固定位置的障碍，在授权区域内切换局部跟踪路线，继续完成分拣。",
+				"迁移时检测到障碍，本体在授权区域内规划局部绕行路线，继续完成分拣。",
 		},
 		{
 			id: "sort-full",
@@ -318,20 +319,20 @@ export function createScene(
 		sortTargets,
 		stages: home
 			? [
-					stage("dispatch", "中控下发取书任务", 0.7),
-					stage("moveA", "沿固定轨迹前往取书台", 2.2),
+					stage("dispatch", "中控规划任务并下发取送指令", 0.7),
+					stage("moveA", "沿规划路线前往取书台", 2.2),
 					stage("pickA", "夹取并抬升书籍", 1.8),
-					stage("moveB", "沿固定轨迹运送", 5),
+					stage("moveB", "沿规划路线运送", 5),
 					stage("checkTarget", "检测交付区占用", 0.7),
 					stage("placeB", "将书移至交付台上方", 1.8),
 					stage("settleB", "释放、重力落定与放置验证", 0.8),
 				]
 			: [
-					stage("dispatch", "中控下发工位任务", 0.7),
+					stage("dispatch", "中控规划跨工位任务并下发指令", 0.7),
 					stage("pickA", "A 工位夹取待搬运物料", 1.5),
 					stage("placeA", "A 工位搬运至补料台", 1.5),
 					stage("settleA", "验证 A 搬运并安全退出", 0.8),
-					stage("moveB", "沿固定轨迹迁移至 B", 5),
+					stage("moveB", "沿规划路线迁移至 B", 5),
 					stage("configureB", "加载 B 工位分拣规则", 0.7),
 					stage("classifyB", "读取颜色标签并选择类别分拣区", 1),
 					stage("checkSort", "检查对应分拣区剩余空间", 0.7),
@@ -378,7 +379,7 @@ export class DemoSimulation {
 			held: null,
 			dropping: false,
 			reason: "",
-			evidence: "等待运行样例",
+			evidence: "等待提交任务",
 			completed: 0,
 			events: [],
 			detours: 0,
@@ -390,9 +391,9 @@ export class DemoSimulation {
 		return this.scene.stages[this.state.stage]?.id ?? "complete";
 	}
 	get label(): string {
-		if (this.replanPause > 0) return "暂停执行，校验授权区域内局部路线";
+		if (this.replanPause > 0) return "暂停执行，规划并校验授权区域内局部路线";
 		if (this.phase === "moveB" && this.state.detours)
-			return "跟踪授权区域内局部路线";
+			return "跟踪规划的局部避障路线";
 		return this.scene.stages[this.state.stage]?.label ?? "任务完成";
 	}
 	private carryPoint(robot: Vec3): Vec3 {
@@ -404,7 +405,7 @@ export class DemoSimulation {
 	start(): void {
 		if (this.state.status !== "idle") return;
 		this.state.status = "running";
-		this.state.evidence = "等待中控下发固定轨迹指令";
+		this.state.evidence = "中控规划移动路线与操作轨迹";
 		this.event(
 			"用户端",
 			this.scene.product === "homeagent"
@@ -414,8 +415,8 @@ export class DemoSimulation {
 		this.event(
 			"中控端",
 			this.scene.product === "homeagent"
-				? "接受任务，调用预设轨迹与任务参数"
-				: "接受任务，加载工位任务与迁移路线",
+				? "接受任务，结合物品位置与交付目标规划取送路线和操作动作"
+				: "接受任务，编排工位任务并规划迁移路线",
 		);
 	}
 	stop(): void {
@@ -475,7 +476,7 @@ export class DemoSimulation {
 				) {
 					this.event(
 						"机器人本体端",
-						"检测到路线障碍，暂停底盘并切换局部跟踪路线",
+						"检测到路线障碍，暂停底盘并规划局部避障路线",
 					);
 					const route = selectLocalRoute(
 						s.robot,
@@ -493,7 +494,7 @@ export class DemoSimulation {
 						s.evidence = "局部路线无碰撞 · 全部位于授权区域内";
 						this.event(
 							"中控端",
-							"授权边界内继续执行；本体局部路线已通过包络校验",
+							"局部避障路线已规划并通过包络校验，在授权区域内继续执行",
 						);
 						return;
 					}
@@ -506,7 +507,7 @@ export class DemoSimulation {
 			s.grip = this.carryPoint(next);
 			if (s.held)
 				s[s.held === "A" ? "itemA" : "itemB"].position = { ...s.grip };
-			s.evidence = `${s.detours ? "局部路线" : this.scene.product === "homeagent" ? "预设轨迹" : "迁移路线"}进度 ${Math.round(p * 100)}% · 底盘包络无重叠`;
+			s.evidence = `${s.detours ? "局部避障路线" : "规划路线"}进度 ${Math.round(p * 100)}% · 底盘包络无重叠`;
 			if (
 				s.held === "A" &&
 				p > 0.35 &&
@@ -529,7 +530,7 @@ export class DemoSimulation {
 				s.grip = lerp(source, this.carryPoint(s.robot), (p - 0.4) / 0.6);
 				s[key === "A" ? "itemA" : "itemB"].position = { ...s.grip };
 			}
-			s.evidence = "简化夹持约束 · 按固定夹取动作执行";
+			s.evidence = "执行规划的抓取动作 · 保持物品夹持";
 		} else if (id === "checkTarget") {
 			const box = this.scene.targetB;
 			const clearance: DemoBox = {
@@ -581,7 +582,7 @@ export class DemoSimulation {
 			s.grip = lerp(this.gripStart, above, p);
 			if (s.held)
 				s[s.held === "A" ? "itemA" : "itemB"].position = { ...s.grip };
-			s.evidence = "固定放置轨迹 · 目标台面上方释放";
+			s.evidence = "执行规划的放置轨迹 · 移至目标台面上方";
 		} else if (id === "settleA" || id === "settleB") {
 			const body =
 				id === "settleA" || this.scene.product === "homeagent"
@@ -662,8 +663,8 @@ export class DemoSimulation {
 			{
 				name: "中控端",
 				task: home
-					? "调用物品记忆与固定取送轨迹"
-					: "编排跨工位任务、限定避障区域、加载分类规则",
+					? "结合物品记忆规划取送路线与操作动作"
+					: "编排跨工位任务、规划迁移路线、加载分类规则",
 				status: initial
 					? "等待任务"
 					: done
@@ -694,7 +695,7 @@ export class DemoSimulation {
 							? "已收到未完成通知"
 							: "已提交 · 无需继续操作",
 				detail: initial
-					? "选择样例并提交一次任务"
+					? "设定目标并提交一次任务"
 					: done
 						? home
 							? "书已送达指定台面"

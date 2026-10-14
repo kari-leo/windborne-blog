@@ -21,7 +21,7 @@ export function createDemoView(host: HTMLElement, config: DemoScene): DemoView {
 	renderer.domElement.setAttribute(
 		"aria-label",
 		home
-			? "家庭取书三维场景：机器人、取书台、床边交付台及固定轨迹"
+			? "家庭取书三维场景：机器人、取书台、床边交付台及规划取送路线"
 			: "跨工位搬运与分类三维场景：A 搬运台、B 类别分拣区、授权避障区域与移动机器人",
 	);
 	renderer.domElement.setAttribute("role", "img");
