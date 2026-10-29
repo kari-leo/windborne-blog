@@ -46,6 +46,10 @@ export const navBarConfig: NavBarConfig = {
 			name: "Portfolio",
 			url: "/portfolio/",
 		},
+		{
+			name: "具身行业周报",
+			url: "/embodied-weekly/",
+		},
 		LinkPreset.Archive,
 		LinkPreset.About,
 		{

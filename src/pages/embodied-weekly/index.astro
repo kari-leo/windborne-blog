@@ -1,0 +1,26 @@
+---
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { getSortedPostsList } from "@utils/content-utils";
+
+const reports = (await getSortedPostsList()).filter((post) =>
+	post.slug.startsWith("embodied-ai-weekly-"),
+);
+---
+<MainGridLayout title="具身行业周报" description="具身智能行业动态与产品观察周报。">
+	<section class="pt-20 pb-12">
+		<p class="mb-4 text-sm uppercase tracking-[0.12em] text-[var(--btn-content)]">Weekly reports</p>
+		<h1 class="serif mb-3 text-[clamp(2.5rem,5vw,4rem)] leading-[1.05] tracking-tight text-[var(--deep-text)]">具身行业周报<span class="gradient-text">.</span></h1>
+		<p class="mb-10 max-w-2xl text-base leading-relaxed text-[var(--btn-content)]">追踪具身智能行业进展、商业化信号与产品判断。</p>
+
+		<div class="soft-divider mb-2"></div>
+		{reports.length > 0 ? reports.map((report) => (
+			<a href={`/posts/${report.slug}/`} class="group block border-b border-[var(--line-color)] py-7 transition-colors hover:border-[var(--primary)]/50">
+				<p class="mb-2 text-sm text-[var(--btn-content)]">{new Date(report.data.published).toLocaleDateString("zh-CN")}</p>
+				<h2 class="serif mb-2 text-2xl text-[var(--deep-text)] transition-colors group-hover:text-[var(--primary)]">{report.data.title}</h2>
+				<p class="max-w-2xl leading-relaxed text-[var(--btn-content)]">{report.data.description}</p>
+			</a>
+		)) : (
+			<p class="py-10 text-[var(--btn-content)]">周报发布后会显示在这里。</p>
+		)}
+	</section>
+</MainGridLayout>
